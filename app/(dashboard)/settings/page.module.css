@@ -1,0 +1,3 @@
+.page { max-width: 980px; margin: 0 auto; }
+.eyebrow { margin: 0 0 13px; color: #84651c; font-size: 12px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; }
+.page h1 { margin: 0 0 34px; color: var(--forest-deep); font: 500 clamp(40px, 6vw, 62px)/1 var(--display-font); letter-spacing: -.045em; }

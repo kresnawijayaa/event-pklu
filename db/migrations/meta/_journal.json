@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1790299667010,
+      "tag": "0000_smooth_calypso",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1790309400000,
+      "tag": "0001_dynamic_whatsapp_date",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1790318560682,
+      "tag": "0002_fast_joshua_kane",
+      "breakpoints": true
+    }
+  ]
+}

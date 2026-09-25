@@ -1,0 +1,13 @@
+.form { width: 100%; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding: 20px; border: 1px solid var(--line); background: #e9e3d6; }
+.form label { display: flex; flex-direction: column; gap: 7px; color: var(--forest-deep); font-size: 13px; font-weight: 700; }
+.form label:first-child, .form label:nth-child(3), .matches, .message, .actions { grid-column: 1 / -1; }
+.form input { width: 100%; min-height: 44px; padding: 9px 11px; border: 1px solid #888b7c; border-radius: 2px; background: var(--paper-light); color: var(--ink); font-size: 16px; }
+.matches { padding: 12px; border-left: 3px solid var(--turmeric); background: var(--paper); }
+.matches strong { color: var(--forest-deep); font-size: 14px; }
+.matches p { margin: 6px 0 0; color: var(--ink-muted); font-size: 13px; line-height: 1.4; }
+.message { margin: 0; color: #65440a; font-size: 13px; }
+.actions { display: flex; justify-content: end; gap: 10px; }
+.actions button { min-height: 44px; padding: 0 14px; border: 1px solid var(--forest); border-radius: 2px; background: var(--forest); color: var(--paper-light); font-weight: 700; cursor: pointer; }
+.actions button.cancel { background: transparent; color: var(--forest); }
+.actions button:disabled { opacity: .6; cursor: wait; }
+@media (max-width: 560px) { .form { grid-template-columns: 1fr; padding: 14px; } .form label, .form label:first-child, .form label:nth-child(3), .matches, .message, .actions { grid-column: auto; } .actions button { flex: 1; } }
