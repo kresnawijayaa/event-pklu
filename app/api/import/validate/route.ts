@@ -20,7 +20,7 @@ const payloadSchema = z.object({ rows: z.array(rowSchema).min(1).max(1_000) }).r
 export async function POST(request: Request) {
   try {
     if (!hasSameOrigin(request)) throw new AppError("INVALID_ORIGIN", 403, "Permintaan tidak berasal dari aplikasi ini.");
-    await requireRole(["ADMIN"]);
+    await requireRole(["STAFF", "ADMIN"]);
     const input = payloadSchema.parse(await request.json().catch(() => null));
     return success({ rows: await validateImportRows(input.rows) });
   } catch (error) { return failure(error); }

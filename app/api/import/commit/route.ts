@@ -17,7 +17,7 @@ const payloadSchema = z.object({ rows: z.array(z.object({
 export async function POST(request: Request) {
   try {
     if (!hasSameOrigin(request)) throw new AppError("INVALID_ORIGIN", 403, "Permintaan tidak berasal dari aplikasi ini.");
-    const session = await requireRole(["ADMIN"]);
+    const session = await requireRole(["STAFF", "ADMIN"]);
     const input = payloadSchema.parse(await request.json().catch(() => null));
     return success(await commitImportRows(input.rows, session));
   } catch (error) { return failure(error); }

@@ -15,3 +15,8 @@
 .opened, .message { font-size: 12px; }
 .actions { column-gap: 0; row-gap: 8px; }
 .confirm, .confirmed { margin-left: 10px; }
+@media (max-width: 600px) {
+  .actions { width: 100%; align-items: center; row-gap: 10px; }
+  .open, .confirm { min-height: 44px; }
+  .opened, .message { flex: 0 0 100%; margin: 0; line-height: 1.45; }
+}

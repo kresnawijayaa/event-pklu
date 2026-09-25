@@ -48,14 +48,14 @@ export default function WhatsAppActions({ participant, template, eventDate, onSt
       if (!response.ok || !result.ok || !result.data) throw new Error(result.error?.message ?? "Konfirmasi belum tersimpan.");
       setOpenedAt(result.data.whatsappOpenedAt); setConfirmedAt(result.data.whatsappConfirmedAt);
       onStatusChange?.(result.data.whatsappOpenedAt, result.data.whatsappConfirmedAt);
-      setMessage("Konfirmasi WhatsApp tersimpan.");
+      setMessage("");
     } catch (error) { setMessage(error instanceof Error ? error.message : "Koneksi bermasalah."); }
     finally { setBusy(false); }
   }
 
   return <div className={styles.actions}>
     <a className={styles.open} href={href} target="_blank" rel="noopener noreferrer" onClick={markOpened}>Buka WhatsApp <span aria-hidden="true">↗</span></a>
-    {confirmedAt ? <span className={styles.confirmed}>Terkonfirmasi</span> : <button className={styles.confirm} type="button" onClick={confirmSent} disabled={busy}>{busy ? "Menyimpan…" : "Konfirmasi terkirim"}</button>}
+    {confirmedAt ? <span className={styles.confirmed} role="status">Terkonfirmasi</span> : <button className={styles.confirm} type="button" onClick={confirmSent} disabled={busy}>{busy ? "Menyimpan…" : "Konfirmasi terkirim"}</button>}
     {message && <span className={styles.message} role="status">{message}</span>}
     {openedAt && !confirmedAt && <span className={styles.opened}>Tautan dibuka · belum dikonfirmasi</span>}
   </div>;

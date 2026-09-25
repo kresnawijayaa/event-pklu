@@ -8,7 +8,7 @@ import styles from "./page.module.css";
 export const metadata: Metadata = { title: "Impor peserta | PKLU GPIB 2026" };
 
 export default async function ImportPage() {
-  try { await requireRole(["ADMIN"]); }
+  try { await requireRole(["STAFF", "ADMIN"]); }
   catch (error) {
     if (error instanceof AppError && error.status === 401) redirect("/login");
     if (error instanceof AppError && error.status === 403) redirect("/");
