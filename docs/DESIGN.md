@@ -1,11 +1,25 @@
 # Design direction
 
-Shared staff and admin tools for an Indonesian church event team. Clear, modern, and easy to read on phones, tablets, and desktops.
+Reference: `../../docs/minimalist_event_manager.html`, supplied by the project owner.
 
-- Audience: PKLU GPIB committee staff and admins using phones, tablets, and desktops.
-- Job: enter a shared PIN before managing registration and check-in.
-- Layout: compact operational screens. Put search, participant data, and actions near the top; avoid decorative space in data views.
-- Palette: light neutral surfaces, forest green, and one warm accent.
-- Type: one sturdy sans serif family across headings, forms, controls, and data; readable at a glance for older users.
-- Structure: simple login panel; compact data screens after authentication.
-- Motion: hover, focus, and form-state feedback only. Keep the login surface calm during event operations.
+## Design Context
+
+### Users
+
+PKLU GPIB committee staff and admins use phones, tablets, and desktops to register participants, manage a roster of roughly 600 people, open prepared WhatsApp messages, and check people in. Some users are older, so text and controls must remain easy to read and tap.
+
+### Brand Personality
+
+Calm, orderly, practical. Indonesian labels and direct instructions. GPIB Harapan Indah remains identified and linked in the interface.
+
+### Aesthetic Direction
+
+Minimal event-management interface based on the supplied HTML: near-white page, white content surfaces, slate text, thin neutral borders, restrained shadows, compact segmented navigation, and sturdy sans-serif typography. Data and actions appear near the top. No landing-page hero treatment.
+
+### Design Principles
+
+- Keep the existing routes and task flows.
+- Give forms, lists, and results one clear surface each; avoid nested decorative cards.
+- Use a compact desktop layout and a phone layout with large touch targets and bottom navigation.
+- Keep headings short and place labels next to the data or control they describe.
+- Use color primarily for state, focus, and primary actions.

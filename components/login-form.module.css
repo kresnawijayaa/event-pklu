@@ -15,3 +15,8 @@
 .secondaryButton { justify-content: center; background: transparent; color: var(--forest); }
 .secondaryButton:hover:not(:disabled) { background: var(--surface-muted); }
 @media (prefers-reduced-motion: reduce) { .input, .submitButton, .secondaryButton { transition: none; } }
+.label { color: var(--ink-muted); font-size: 14px; font-weight: 600; }
+.input { min-height: 48px; border-color: #cbd5e1; border-radius: 7px; }
+.submitButton, .secondaryButton { min-height: 46px; justify-content: center; border-radius: 7px; font-size: 14px; font-weight: 600; }
+.submitButton span { display: none; }
+.hint, .sessionNote { font-size: 13px; }

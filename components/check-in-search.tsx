@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { ScanLine } from "lucide-react";
 import styles from "./check-in-search.module.css";
 
 type Participant = { id: string; registrationCode: string; name: string; whatsappE164: string; church: string | null;
@@ -47,7 +48,7 @@ export default function CheckInSearch() {
   return <section className={styles.section}>
     <form className={styles.search} onSubmit={search} role="search">
       <label htmlFor="check-in-query">Kode atau nama peserta</label>
-      <div><input id="check-in-query" value={query} onChange={(event) => setQuery(event.target.value)} required /><button type="submit" disabled={busy}>{busy ? "Mencari…" : "Cari peserta"}</button></div>
+      <div><span className={styles.searchField}><ScanLine aria-hidden="true" /><input id="check-in-query" value={query} onChange={(event) => setQuery(event.target.value)} required /></span><button type="submit" disabled={busy}>{busy ? "Mencari…" : "Cari peserta"}</button></div>
     </form>
     {message && <p className={styles.message} role="status">{message}</p>}
     {searched && items.length > 0 && <div className={styles.results}>

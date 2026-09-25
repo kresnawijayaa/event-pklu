@@ -17,3 +17,15 @@
 .submit:hover:not(:disabled) { background: var(--forest-deep); }
 .submit:disabled { opacity: .65; cursor: not-allowed; }
 .submit span { color: #e6c875; font-size: 20px; }
+.form { padding: 20px; border: 1px solid var(--line); border-radius: 14px; background: white; box-shadow: var(--shadow-subtle); }
+.field { gap: 6px; margin-bottom: 16px; }
+.field label { color: var(--ink-muted); font-size: 14px; font-weight: 600; }
+.field label span, .field > span { color: var(--ink-muted); font-size: 12px; }
+.field input { min-height: 44px; border-color: #cbd5e1; border-radius: 7px; font-size: 15px; }
+.field input:hover { border-color: #94a3b8; }
+.duplicates { border-left: 0; border-radius: 7px; background: #fffbeb; }
+.duplicates h2 { color: var(--ink); font-size: 16px; }
+.warning { color: #854d0e; }
+.submit { min-height: 46px; justify-content: center; border-radius: 7px; font-size: 14px; font-weight: 600; }
+.submit span { display: none; }
+@media (max-width: 560px) { .form { padding: 16px; } }

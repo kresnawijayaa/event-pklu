@@ -21,3 +21,17 @@
 .commit { justify-self: start; min-height: 46px; padding: 0 18px; border: 0; background: var(--forest); color: white; font-weight: 700; cursor: pointer; }
 .commit:disabled { opacity: .55; cursor: not-allowed; }
 @media (max-width: 600px) { .picker { padding: 12px; } .counts { gap: 10px 16px; } }
+.tool { gap: 14px; }
+.picker { padding: 18px; border: 1px solid var(--line); border-radius: 12px; background: white; box-shadow: var(--shadow-subtle); }
+.picker label { margin-bottom: 7px; color: var(--ink); font-size: 14px; font-weight: 600; }
+.picker p { color: var(--ink-muted); font-size: 13px; }
+.status, .summary, .progress { border: 1px solid #cbd5e1; border-radius: 8px; background: #f8fafc; color: var(--ink); }
+.error { border-radius: 8px; }
+.counts { font-size: 13px; }
+.counts strong { color: var(--ink); }
+.tableWrap { border-radius: 10px; }
+.tableWrap table { font-size: 13px; }
+.tableWrap th, .tableWrap td { padding: 10px 12px; }
+.tableWrap th { background: #f8fafc; color: var(--ink-muted); font-weight: 600; }
+.valid, .warning, .error, .imported, .skipped { border-radius: 5px; font-size: 12px; }
+.commit { min-height: 44px; padding: 0 16px; border-radius: 7px; font-size: 14px; font-weight: 600; }

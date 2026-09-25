@@ -27,3 +27,17 @@
   .metric strong { font-size: 34px; }
 }
 @media (prefers-reduced-motion: reduce) { .track span { transition: none; } }
+.heading { align-items: center; padding: 0 0 18px; border-bottom: 0; }
+.heading h1 { color: var(--ink); font-size: clamp(24px, 2.4vw, 30px); font-weight: 600; letter-spacing: -.035em; }
+.date { color: var(--ink-muted); font-size: 14px; }
+.date span { color: var(--ink-muted); }
+.progress { width: 220px; padding: 0; color: var(--ink-muted); font-size: 13px; }
+.progress strong { color: var(--ink); font-size: 22px; font-weight: 600; }
+.progress small { color: var(--ink-muted); font-size: 13px; }
+.track { height: 5px; margin-top: 7px; border-radius: 5px; background: #e2e8f0; }
+.track span { border-radius: 5px; background: #334155; }
+.metrics { gap: 12px; margin-top: 4px; border: 0; }
+.metric, .metric:first-child { min-height: 116px; padding: 18px; border: 1px solid var(--line); border-radius: 12px; background: white; box-shadow: var(--shadow-subtle); }
+.metric p { color: var(--ink-muted); font-size: 13px; font-weight: 500; }
+.metric strong, .metric strong.primaryValue { margin-top: 13px; color: var(--ink); font-size: 31px; font-weight: 600; }
+@media (max-width: 760px) { .heading { display: block; } .progress { width: min(100%, 320px); margin-top: 12px; } .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); } .metric, .metric:first-child { min-height: 100px; padding: 14px; } .metric strong { font-size: 28px; } }

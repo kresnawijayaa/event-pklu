@@ -1,5 +1,7 @@
 ﻿.page { max-width: 1200px; margin: 0 auto; }
 .page h1 { margin: 0 0 14px; color: var(--forest-deep); font: 700 clamp(28px, 3vw, 36px)/1.15 var(--display-font); letter-spacing: -.025em; }
+.page h1 { margin-bottom: 16px; font-size: clamp(24px, 2.4vw, 30px); font-weight: 600; letter-spacing: -.035em; }
 @media (max-width: 600px) {
   .page h1 { margin-bottom: 10px; font-size: 28px; }
 }
+@media (max-width: 600px) { .page h1 { margin-bottom: 12px; font-size: 25px; } }

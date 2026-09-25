@@ -9,3 +9,9 @@
 .confirmed, .opened, .message { color: var(--ink-muted); font-size: 14px; line-height: 1.45; }
 .confirmed { padding: 6px 9px; border: 1px solid #a5b7a9; color: var(--forest); font-weight: 700; }
 .message { flex-basis: 100%; }
+.open, .confirm { min-height: 42px; border-radius: 7px; font-size: 13px; font-weight: 600; }
+.confirm { border-color: #cbd5e1; background: white; color: var(--ink); }
+.confirmed { border-color: #bbdfc8; border-radius: 5px; color: #177245; font-size: 12px; }
+.opened, .message { font-size: 12px; }
+.actions { column-gap: 0; row-gap: 8px; }
+.confirm, .confirmed { margin-left: 10px; }

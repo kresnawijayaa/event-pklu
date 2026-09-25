@@ -15,3 +15,9 @@
   .content { padding: 20px 16px; }
   .content h1 { font-size: 28px; }
 }
+.shell { background: var(--paper); }
+.panel { border-radius: 14px; box-shadow: var(--shadow-subtle); }
+.brand { border-bottom-color: var(--line); }
+.brand strong { color: var(--ink); }
+.content h1 { color: var(--ink); font-size: 28px; font-weight: 600; }
+.instruction, .help { color: var(--ink-muted); font-size: 14px; }
