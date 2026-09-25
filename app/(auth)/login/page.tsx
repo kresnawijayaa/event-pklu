@@ -19,26 +19,17 @@ export default async function LoginPage() {
 
   return (
     <main className={styles.shell}>
-      <section className={styles.story} aria-labelledby="event-title">
-        <p className={styles.eyebrow}><a href="https://gpibharapanindah.org" target="_blank" rel="noopener noreferrer">GPIB Harapan Indah</a> · 2026</p>
-        <div className={styles.storyCopy}>
-          <p className={styles.kicker}>Portal panitia</p>
-          <h1 id="event-title">Temu<br />PKLU 2026.</h1>
-        </div>
-        <div className={styles.eventMark} aria-hidden="true">
-          <span>Persekutuan Kaum Lanjut Usia</span>
-          <span className={styles.year}>2026</span>
-        </div>
-      </section>
-      <div className={styles.seam} aria-hidden="true"><span /></div>
-      <section className={styles.access} aria-labelledby="access-title">
-        <div className={styles.accessInner}>
-          <h2 id="access-title">Masuk.</h2>
-          <p className={styles.instruction}>Masukkan PIN panitia untuk melanjutkan.</p>
+      <section className={styles.panel} aria-labelledby="access-title">
+        <header className={styles.brand}>
+          <strong>PKLU <span>2026</span></strong>
+          <a href="https://gpibharapanindah.org" target="_blank" rel="noopener noreferrer">GPIB Harapan Indah</a>
+        </header>
+        <div className={styles.content}>
+          <h1 id="access-title">Masuk panitia</h1>
+          <p className={styles.instruction}>Masukkan PIN untuk melanjutkan.</p>
           <LoginForm />
-          <p className={styles.help}>Perlu bantuan akses? Hubungi koordinator panitia.</p>
+          <p className={styles.help}>Perlu bantuan? Hubungi koordinator panitia.</p>
         </div>
-        <footer className={styles.footer}>PKLU 2026 <span>·</span> <a href="https://gpibharapanindah.org" target="_blank" rel="noopener noreferrer">GPIB Harapan Indah</a></footer>
       </section>
     </main>
   );

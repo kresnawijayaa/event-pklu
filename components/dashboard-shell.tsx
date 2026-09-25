@@ -43,12 +43,12 @@ export default function DashboardShell({ role, children }: { role: AccessRole; c
       </header>
       <main className={styles.main}>{children}</main>
       <nav className={`${styles.mobileNav} ${role === "ADMIN" ? styles.adminMobileNav : ""}`} aria-label="Menu utama">
-        <Link href="/" aria-current={pathname === "/" ? "page" : undefined}><House aria-hidden="true" />Ringkasan</Link>
+        <Link href="/" aria-label="Ringkasan" aria-current={pathname === "/" ? "page" : undefined}><House aria-hidden="true" />Beranda</Link>
         <Link href="/participants" aria-current={pathname === "/participants" ? "page" : undefined}><UsersRound aria-hidden="true" />Peserta</Link>
-        <Link href="/register" aria-current={pathname === "/register" ? "page" : undefined}><UserRoundPlus aria-hidden="true" />Registrasi</Link>
+        <Link href="/register" aria-label="Registrasi peserta" aria-current={pathname === "/register" ? "page" : undefined}><UserRoundPlus aria-hidden="true" />Tambah</Link>
         <Link href="/check-in" aria-current={pathname === "/check-in" ? "page" : undefined}><ClipboardCheck aria-hidden="true" />Check-in</Link>
         {role === "ADMIN" && <Link href="/import" aria-current={pathname === "/import" ? "page" : undefined}><FileUp aria-hidden="true" />Impor</Link>}
-        {role === "ADMIN" && <Link href="/settings" aria-current={pathname === "/settings" ? "page" : undefined}><Settings2 aria-hidden="true" />Pengaturan</Link>}
+        {role === "ADMIN" && <Link href="/settings" aria-label="Pengaturan" aria-current={pathname === "/settings" ? "page" : undefined}><Settings2 aria-hidden="true" />Atur</Link>}
       </nav>
       <footer className={styles.footer}>PKLU 2026 <span>·</span> <a href="https://gpibharapanindah.org" target="_blank" rel="noopener noreferrer">GPIB Harapan Indah</a></footer>
     </div>

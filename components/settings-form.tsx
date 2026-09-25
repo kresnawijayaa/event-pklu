@@ -83,8 +83,7 @@ export default function SettingsForm({ initial }: { initial: SettingsData }) {
       <button className={styles.submit} type="submit" disabled={busy}>{busy ? "Menyimpan…" : "Simpan pengaturan"}</button>
     </form>
     <section className={styles.audit} aria-labelledby="audit-title">
-      <p className={styles.eyebrow}>Jejak perubahan</p>
-      <h2 id="audit-title">Aktivitas terbaru.</h2>
+      <h2 id="audit-title">Aktivitas terbaru</h2>
       {audit.length ? <ol>{audit.map((item, index) => <li key={`${item.action}-${item.createdAt}-${index}`}><span>{actionNames[item.action] ?? item.action}</span><time dateTime={new Date(item.createdAt).toISOString()}>{formatAuditDate(item.createdAt)} WIB</time><small>{item.actorRole === "ADMIN" ? "Admin" : item.actorRole === "STAFF" ? "Panitia" : "Sistem"}</small></li>)}</ol> : <p className={styles.empty}>Belum ada aktivitas acara tercatat.</p>}
     </section>
   </div>;

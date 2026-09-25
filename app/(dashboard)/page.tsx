@@ -13,18 +13,17 @@ export default async function DashboardPage() {
   if (!summary) redirect("/login");
 
   const metrics = [
-    { label: "Sudah terdaftar", value: summary.registered, detail: `dari target ${summary.event.target}` },
-    { label: "Sudah hadir", value: summary.checkedIn, detail: "check-in tercatat" },
-    { label: "Belum hadir", value: summary.notCheckedIn, detail: "menunggu check-in" },
-    { label: "WhatsApp terkonfirmasi", value: summary.whatsappConfirmed, detail: "konfirmasi tercatat" },
+    { label: "Sudah terdaftar", value: summary.registered },
+    { label: "Sudah hadir", value: summary.checkedIn },
+    { label: "Belum hadir", value: summary.notCheckedIn },
+    { label: "WhatsApp terkonfirmasi", value: summary.whatsappConfirmed },
   ];
 
   return (
     <div className={styles.page}>
       <div className={styles.heading}>
         <div>
-          <p className={styles.eyebrow}>PKLU 2026</p>
-          <h1>Ringkasan acara.</h1>
+          <h1>Ringkasan acara</h1>
           <p className={styles.date}>{summary.event.name} <span aria-hidden="true">·</span> {formatEventDate(summary.event.eventDate)}</p>
         </div>
         <div className={styles.progress} aria-label={`${summary.registered} dari target ${summary.event.target} peserta terdaftar`}>
@@ -38,7 +37,6 @@ export default async function DashboardPage() {
           <article className={styles.metric} key={metric.label}>
             <p>{metric.label}</p>
             <strong className={index === 0 ? styles.primaryValue : undefined}>{metric.value.toLocaleString("id-ID")}</strong>
-            <span>{metric.detail}</span>
           </article>
         ))}
       </section>

@@ -18,8 +18,7 @@ export default async function SettingsPage() {
   }
   const data = await getEventSettings();
   return <div className={styles.page}>
-    <p className={styles.eyebrow}>Khusus Admin</p>
-    <h1>Pengaturan acara.</h1>
+    <h1>Pengaturan acara</h1>
     <SettingsForm initial={data} />
   </div>;
 }

@@ -16,8 +16,7 @@ export default async function DeletedParticipantsPage() {
     throw error;
   }
   return <div className={styles.page}>
-    <p className={styles.eyebrow}>Arsip peserta</p>
-    <h1>Terhapus.</h1>
+    <h1>Peserta terhapus</h1>
     <ParticipantList role="ADMIN" deleted />
   </div>;
 }

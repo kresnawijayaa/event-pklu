@@ -1,31 +1,29 @@
-.page { max-width: 1060px; margin: 0 auto; }
-.heading { display: flex; align-items: end; justify-content: space-between; gap: 40px; padding-bottom: 38px; border-bottom: 1px solid var(--line); }
-.eyebrow { margin: 0 0 13px; color: #84651c; font-size: 12px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; }
-.heading h1 { margin: 0; color: var(--forest-deep); font: 500 clamp(42px, 6vw, 68px)/1 var(--display-font); letter-spacing: -.045em; }
-.date { margin: 16px 0 0; color: var(--ink-muted); font-size: 15px; line-height: 1.5; }
+﻿.page { max-width: 1060px; margin: 0 auto; }
+.heading { display: flex; align-items: end; justify-content: space-between; gap: 20px; padding-bottom: 18px; border-bottom: 1px solid var(--line); }
+.heading h1 { margin: 0; color: var(--forest-deep); font: 700 clamp(28px, 3vw, 36px)/1.15 var(--display-font); letter-spacing: -.025em; }
+.date { margin: 6px 0 0; color: var(--ink-muted); font-size: 16px; line-height: 1.5; }
 .date span { padding: 0 5px; color: #84651c; }
-.progress { width: min(100%, 250px); padding-bottom: 3px; color: var(--ink-muted); font-size: 13px; }
-.progress > span { display: block; margin-bottom: 10px; }
-.progress strong { color: var(--forest); font: 500 31px var(--display-font); }
-.progress small { color: var(--ink-muted); font: 14px var(--body-font); }
-.track { height: 5px; margin-top: 10px; overflow: hidden; background: #dbd5c7; }
+.progress { width: min(100%, 250px); padding-bottom: 3px; color: var(--ink-muted); font-size: 15px; }
+.progress > span { display: block; margin-bottom: 4px; }
+.progress strong { color: var(--forest); font: 700 31px var(--display-font); }
+.progress small { color: var(--ink-muted); font: 16px var(--body-font); }
+.track { height: 5px; margin-top: 10px; overflow: hidden; background: var(--surface-muted); }
 .track span { display: block; height: 100%; background: var(--forest); transition: width 180ms ease; }
-.metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 30px 0 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-.metric { min-height: 170px; padding: 24px 22px 22px; border-right: 1px solid var(--line); }
+.metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 16px 0 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.metric { min-height: 106px; padding: 14px 16px; border-right: 1px solid var(--line); }
 .metric:first-child { padding-left: 0; }
 .metric:last-child { border-right: 0; }
-.metric p { min-height: 38px; margin: 0; color: var(--ink-muted); font-size: 13px; line-height: 1.45; }
-.metric strong { display: block; margin-top: 12px; color: var(--forest-deep); font: 500 43px/1 var(--display-font); }
+.metric p { margin: 0; color: var(--ink-muted); font-size: 15px; line-height: 1.45; }
+.metric strong { display: block; margin-top: 6px; color: var(--forest-deep); font: 700 36px/1 var(--display-font); }
 .metric strong.primaryValue { color: #84651c; }
-.metric > span { display: block; margin-top: 10px; color: var(--ink-muted); font-size: 12px; line-height: 1.45; }
 @media (max-width: 760px) {
   .heading { display: block; }
-  .progress { margin-top: 29px; width: min(100%, 360px); }
+  .progress { margin-top: 14px; width: min(100%, 360px); }
   .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .metric { min-height: 153px; padding: 20px 14px; border-bottom: 1px solid var(--line); }
-  .metric:first-child { padding-left: 14px; }
+  .metric { min-height: 100px; padding: 12px; border-bottom: 1px solid var(--line); }
+  .metric:first-child { padding-left: 12px; }
   .metric:nth-child(2) { border-right: 0; }
   .metric:nth-child(3), .metric:nth-child(4) { border-bottom: 0; }
-  .metric strong { font-size: 38px; }
+  .metric strong { font-size: 34px; }
 }
 @media (prefers-reduced-motion: reduce) { .track span { transition: none; } }

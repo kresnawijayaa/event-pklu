@@ -15,8 +15,7 @@ export default async function ImportPage() {
     throw error;
   }
   return <div className={styles.page}>
-    <p className={styles.eyebrow}>Khusus Admin</p>
-    <h1>Impor peserta.</h1>
+    <h1>Impor peserta</h1>
     <ImportTool />
   </div>;
 }

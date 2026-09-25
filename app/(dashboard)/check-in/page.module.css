@@ -1,3 +1,2 @@
-.page { max-width: 860px; margin: 0 auto; }
-.eyebrow { margin: 0 0 13px; color: #84651c; font-size: 12px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; }
-.page h1 { margin: 0 0 34px; color: var(--forest-deep); font: 500 clamp(42px, 6vw, 62px)/1 var(--display-font); letter-spacing: -.045em; }
+﻿.page { max-width: 860px; margin: 0 auto; }
+.page h1 { margin: 0 0 14px; color: var(--forest-deep); font: 700 clamp(28px, 3vw, 36px)/1.15 var(--display-font); letter-spacing: -.025em; }

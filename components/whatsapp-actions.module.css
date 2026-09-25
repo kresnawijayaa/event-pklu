@@ -1,11 +1,11 @@
-.actions { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
-.open, .confirm { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 0 12px; border: 1px solid var(--forest); border-radius: 2px; font-size: 12px; font-weight: 700; text-decoration: none; cursor: pointer; }
+﻿.actions { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+.open, .confirm { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 0 12px; border: 1px solid var(--forest); border-radius: 6px; font-size: 15px; font-weight: 700; text-decoration: none; cursor: pointer; }
 .open { background: var(--forest); color: var(--paper-light); }
 .open:hover { background: var(--forest-deep); }
 .open span { color: #e6c875; font-size: 16px; }
 .confirm { background: transparent; color: var(--forest); }
-.confirm:hover:not(:disabled) { background: #e7e1d3; }
+.confirm:hover:not(:disabled) { background: var(--surface-muted); }
 .confirm:disabled { opacity: .6; cursor: wait; }
-.confirmed, .opened, .message { color: var(--ink-muted); font-size: 12px; line-height: 1.45; }
+.confirmed, .opened, .message { color: var(--ink-muted); font-size: 14px; line-height: 1.45; }
 .confirmed { padding: 6px 9px; border: 1px solid #a5b7a9; color: var(--forest); font-weight: 700; }
 .message { flex-basis: 100%; }
