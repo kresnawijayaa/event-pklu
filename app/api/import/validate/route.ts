@@ -10,6 +10,7 @@ export const runtime = "nodejs";
 
 const rowSchema = z.object({
   requestId: z.string().uuid(), name: z.string().max(500), whatsapp: z.string().max(60), church: z.string().max(500).nullable().optional(),
+  isVip: z.boolean().default(false),
   ...participantDetailsSchema,
 });
 const payloadSchema = z.object({ rows: z.array(rowSchema).min(1).max(1_000) }).refine(

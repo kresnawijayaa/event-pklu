@@ -15,6 +15,7 @@ const createSchema = z.object({
   name: z.string().max(500),
   whatsapp: z.string().max(40),
   church: z.string().max(500).nullable().optional(),
+  isVip: z.boolean().default(false),
   ...participantDetailsSchema,
   confirmDuplicate: z.boolean().default(false),
 });

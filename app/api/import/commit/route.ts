@@ -11,6 +11,7 @@ export const runtime = "nodejs";
 const payloadSchema = z.object({ rows: z.array(z.object({
   requestId: z.string().uuid(), name: z.string().max(500), whatsapp: z.string().max(60),
   church: z.string().max(500).nullable().optional(), confirmDuplicate: z.boolean().default(false),
+  isVip: z.boolean().default(false),
   ...participantDetailsSchema,
 })).min(1).max(100) });
 

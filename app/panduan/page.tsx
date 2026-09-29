@@ -18,7 +18,7 @@ export default function GuidePage() {
       <div className={styles.intro}>
         <p className={styles.kicker}>Untuk panitia</p>
         <h1>Panduan penggunaan</h1>
-        <p>Web ini menyimpan data peserta, menyiapkan pesan WhatsApp, dan mencatat siapa yang sudah hadir. Nomor registrasi dibuat otomatis saat data disimpan. Awal nomornya mengikuti prefix di Pengaturan.</p>
+        <p>Web ini menyimpan data peserta, menyiapkan pesan WhatsApp, dan mencatat siapa yang sudah hadir. Nomor registrasi dibuat otomatis saat data disimpan. Peserta biasa mengikuti prefix di Pengaturan; tamu VIP memakai VIP-.</p>
       </div>
 
       <nav className={styles.contents} aria-label="Isi panduan">
@@ -41,6 +41,8 @@ export default function GuidePage() {
             <li>Baris bertanda Periksa perlu ditinjau sebelum dipilih. Baris Tidak bisa harus diperbaiki di Excel, lalu file diunggah kembali.</li>
             <li>Jika data serupa ditemukan, periksa nama dan nomor WhatsApp sebelum memilih baris itu.</li>
             <li>Jangan membuat nomor registrasi di Excel. Sistem membuatnya saat peserta tersimpan.</li>
+            <li>Untuk tamu VIP, centang Tamu VIP saat menambah satu peserta. Saat impor, isi kolom VIP dengan Ya atau tandai baris di pratinjau. Gunakan Tandai semua VIP jika seluruh baris yang siap diimpor adalah VIP. Nomor VIP memakai urutan peserta yang sama, dengan awalan VIP-.</li>
+            <li>Template Excel memiliki sheet Peserta untuk data asli dan sheet Contoh berisi data dummy. Jangan impor sheet Contoh.</li>
           </ul>
         </div>
       </section>
@@ -72,7 +74,7 @@ export default function GuidePage() {
         <div><h2>Ubah pengaturan acara</h2>
           <p>Panitia dan Admin bisa membuka <Link href="/settings">Pengaturan</Link> untuk mengubah nama acara, tanggal, prefix registrasi, dan template pesan WhatsApp. Periksa isinya, lalu pilih <strong>Simpan pengaturan</strong>.</p>
           <ul>
-            <li><strong>Prefix registrasi</strong> adalah awal nomor peserta, misalnya PKLU- atau REG-. Setelah prefix diganti, peserta baru memakai prefix terbaru. Nomor peserta yang sudah dibuat tetap sama.</li>
+            <li><strong>Prefix registrasi</strong> adalah awal nomor peserta biasa, misalnya PKLU- atau REG-. Setelah prefix diganti, peserta biasa yang baru memakai prefix terbaru. Tamu VIP selalu memakai VIP-. Nomor peserta yang sudah dibuat tetap sama.</li>
             <li><strong>Template WhatsApp</strong> dipakai saat membuka pesan berikutnya. Tulis <strong>{"{{nama}}"}</strong> untuk nama peserta dan <strong>{"{{nomor}}"}</strong> untuk nomor registrasi. Token <strong>{"{{jemaat}}"}</strong> dan <strong>{"{{tanggal}}"}</strong> juga tersedia. Periksa Pratinjau pesan sebelum menyimpan.</li>
             <li>Jumlah peserta di Beranda dihitung dari data yang sudah tersimpan. Tidak ada target peserta yang perlu diisi.</li>
           </ul>

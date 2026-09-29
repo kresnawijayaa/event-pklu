@@ -4,7 +4,7 @@ import { useRef, useState, type FormEvent } from "react";
 import { ScanLine } from "lucide-react";
 import styles from "./check-in-search.module.css";
 
-type Participant = { id: string; registrationCode: string; name: string; whatsappE164: string; church: string | null;
+type Participant = { id: string; registrationCode: string; isVip: boolean; name: string; whatsappE164: string; church: string | null;
   registrationMode: string | null; category: string | null; mupel: string | null;
   participantType: string | null; registrationChannel: string | null; checkedInAt: string | null };
 type SearchResult = { ok: boolean; data?: { participants: Participant[] }; error?: { message?: string } };
@@ -71,7 +71,7 @@ export default function CheckInSearch() {
     {success && <div className={styles.success} role="status"><strong>Kehadiran tercatat</strong><p>{success.name} · {success.registrationCode}</p><p>{success.checkedInAt && formatTime(success.checkedInAt)} WIB</p><div className={styles.successActions}><button type="button" onClick={() => { setSuccess(null); setQuery(""); setItems([]); setSearched(false); searchRef.current?.focus(); }}>Cari peserta berikutnya</button><button type="button" className={styles.cancelCheckIn} disabled={busy} onClick={() => cancelCheckIn(success)}>Batalkan check-in</button></div></div>}
     {searched && items.length > 0 && <div className={styles.results}>
       {items.map((item) => <article className={styles.result} key={item.id}>
-        <div><span className={styles.code}>{item.registrationCode}</span><h2>{item.name}</h2><p>WhatsApp: {item.whatsappE164}</p>{item.church && <p>{item.church}</p>}
+        <div><span className={styles.code}>{item.registrationCode}</span>{item.isVip && <span className={styles.vipBadge}>VIP</span>}<h2>{item.name}</h2><p>WhatsApp: {item.whatsappE164}</p>{item.church && <p>{item.church}</p>}
           <div className={styles.detail}>
             {item.participantType && <span>Tipe: {item.participantType}</span>}
             {item.category && <span>Kategori: {item.category}</span>}

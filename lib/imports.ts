@@ -5,12 +5,14 @@ import type { AuthSession } from "@/lib/auth/types";
 import { AppError } from "@/lib/errors";
 import { normalizeParticipantInput } from "@/lib/participants/service";
 import type { ParticipantDetailsInput } from "@/lib/participants/details";
+import { registrationCode } from "@/lib/participants/registration";
 
 export type ImportInputRow = ParticipantDetailsInput & {
   requestId: string;
   name: string;
   whatsapp: string;
   church?: string | null;
+  isVip?: boolean;
 };
 
 type NormalizedRow = ImportInputRow & ReturnType<typeof normalizeParticipantInput> & { index: number };
@@ -76,6 +78,7 @@ export async function validateImportRows(rows: ImportInputRow[]) {
         name: item.row.name, whatsapp: item.row.whatsappE164, church: item.row.church,
         registrationMode: item.row.registrationMode, category: item.row.category, mupel: item.row.mupel,
         participantType: item.row.participantType, registrationChannel: item.row.registrationChannel,
+        isVip: item.row.isVip === true,
       },
       candidates,
     };
@@ -135,7 +138,8 @@ export async function commitImportRows(rows: Array<ImportInputRow & { confirmDup
       const inserted = await tx.insert(participants).values(accepted.map(({ row }, offset) => ({
         eventId: event.id,
         sequenceNumber: firstSequence + offset,
-        registrationCode: `${event.registrationPrefix}${String(firstSequence + offset).padStart(event.registrationPadding, "0")}`,
+        registrationCode: registrationCode(event.registrationPrefix, event.registrationPadding, firstSequence + offset, row.isVip === true),
+        isVip: row.isVip === true,
         name: row.name,
         nameNormalized: row.nameNormalized,
         whatsappE164: row.whatsappE164,
@@ -153,7 +157,7 @@ export async function commitImportRows(rows: Array<ImportInputRow & { confirmDup
       for (const { row } of accepted) resultById.set(row.requestId, { status: "IMPORTED", registrationCode: byRequest.get(row.requestId) });
       await tx.insert(auditLogs).values({
         eventId: event.id, actorRole: session.role, actorSessionId: session.sessionId,
-        action: "IMPORT_COMPLETED", metadata: { imported: accepted.length, batchSize: rows.length },
+        action: "IMPORT_COMPLETED", metadata: { imported: accepted.length, vip: accepted.filter(({ row }) => row.isVip === true).length, batchSize: rows.length },
       });
     }
 

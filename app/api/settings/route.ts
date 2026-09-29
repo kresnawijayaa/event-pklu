@@ -4,6 +4,7 @@ import { hasSameOrigin } from "@/lib/auth/origin";
 import { AppError } from "@/lib/errors";
 import { failure, success } from "@/lib/response";
 import { getEventSettings, updateEventSettings } from "@/lib/settings";
+import { VIP_PREFIX } from "@/lib/participants/registration";
 
 export const runtime = "nodejs";
 
@@ -14,7 +15,7 @@ const settingsSchema = z.object({
     const date = new Date(`${value}T00:00:00Z`);
     return !Number.isNaN(date.getTime()) && date.toISOString().slice(0, 10) === value;
   }, "Tanggal acara tidak valid."),
-  registrationPrefix: z.string().regex(/^[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)*-$/).max(20),
+  registrationPrefix: z.string().regex(/^[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)*-$/).max(20).refine((prefix) => prefix !== VIP_PREFIX, "VIP- khusus untuk tamu VIP. Pilih prefix lain untuk peserta biasa."),
   whatsappTemplate: z.string().trim().min(1).max(5_000).refine((template) => {
     const tokens = [...template.matchAll(/\{\{([^{}]+)\}\}/g)].map((match) => match[1]);
     return tokens.every((token) => templateTokens.has(token)) && tokens.includes("nama") && tokens.includes("nomor");

@@ -1,0 +1,1 @@
+ALTER TABLE "participants" ADD COLUMN "is_vip" boolean DEFAULT false NOT NULL;

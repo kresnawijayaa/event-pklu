@@ -11,6 +11,7 @@ type Row = {
   line: number; requestId: string; name: string; whatsapp: string; church: string | null;
   registrationMode: string | null; category: string | null; mupel: string | null;
   participantType: string | null; registrationChannel: string | null;
+  isVip: boolean; vipInvalid: boolean;
   status?: Status; message?: string; candidates?: Candidate[]; include: boolean;
 };
 type Outcome = { requestId: string; status: "IMPORTED" | "SKIPPED" | "FAILED"; registrationCode?: string; message?: string };
@@ -25,7 +26,15 @@ const aliases = {
   mupel: new Set(["asalmupel", "mupel"]),
   participantType: new Set(["tipe", "tipepeserta", "participanttype"]),
   registrationChannel: new Set(["daftar", "caradaftar", "registrationchannel"]),
+  isVip: new Set(["vip", "tamuvip"]),
 };
+
+function parseVip(value: string | null) {
+  const answer = value?.trim().toLocaleLowerCase("id-ID") ?? "";
+  if (!answer || ["tidak", "no", "0", "false"].includes(answer)) return false;
+  if (["ya", "yes", "1", "true", "vip"].includes(answer)) return true;
+  return null;
+}
 
 function headerKey(value: unknown) {
   return String(value ?? "").replace(/^\uFEFF/, "").normalize("NFKD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("id-ID").replace(/[^a-z0-9]/g, "");
@@ -52,10 +61,22 @@ export default function ImportTool() {
   const [previewFilter, setPreviewFilter] = useState<"issues" | "all">("all");
 
   function downloadTemplate() {
-    const sheet = XLSX.utils.aoa_to_sheet([["Nama", "Nomor WhatsApp", "Asal Jemaat", "Mode", "Kategori", "Asal Mupel", "Tipe", "Daftar"]]);
-    sheet["!cols"] = [{ wch: 28 }, { wch: 20 }, { wch: 24 }, { wch: 18 }, { wch: 18 }, { wch: 18 }, { wch: 18 }, { wch: 18 }];
+    const headers = ["Nama", "Nomor WhatsApp", "Asal Jemaat", "Mode", "Kategori", "Asal Mupel", "Tipe", "Daftar", "VIP"];
+    const widths = [{ wch: 28 }, { wch: 20 }, { wch: 24 }, { wch: 18 }, { wch: 18 }, { wch: 18 }, { wch: 18 }, { wch: 18 }, { wch: 12 }];
+    const sheet = XLSX.utils.aoa_to_sheet([headers]);
+    sheet["!cols"] = widths;
+    sheet["!autofilter"] = { ref: "A1:I1" };
+    const example = XLSX.utils.aoa_to_sheet([
+      ["CONTOH SAJA — JANGAN DIIMPOR"],
+      ["Isi data asli di sheet Peserta. Kolom VIP: Ya untuk VIP; Tidak atau kosong untuk peserta biasa."],
+      headers,
+      ["Contoh Biasa", "081234567890", "GPIB Contoh", "Mandiri", "Umum", "", "Peserta", "Manual", "Tidak"],
+      ["Contoh VIP", "081234567891", "GPIB Contoh", "Mandiri", "Tamu", "", "Peserta", "Manual", "Ya"],
+    ]);
+    example["!cols"] = widths;
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, sheet, "Peserta");
+    XLSX.utils.book_append_sheet(workbook, example, "Contoh");
     XLSX.writeFile(workbook, "template-peserta-pklu.xlsx");
   }
 
@@ -77,6 +98,7 @@ export default function ImportTool() {
       const mupelColumn = findColumn(headers, aliases.mupel);
       const typeColumn = findColumn(headers, aliases.participantType);
       const channelColumn = findColumn(headers, aliases.registrationChannel);
+      const vipColumn = findColumn(headers, aliases.isVip);
       if (nameColumn < 0 || whatsappColumn < 0) throw new Error("Kolom Nama dan Nomor WhatsApp belum ditemukan di baris pertama. Gunakan template Excel yang tersedia.");
       const cell = (values: unknown[], column: number) => column >= 0 ? String(values[column] ?? "").trim() || null : null;
       const rawRows = matrix.slice(1).map((values, index) => ({
@@ -88,7 +110,9 @@ export default function ImportTool() {
         registrationMode: cell(values, modeColumn), category: cell(values, categoryColumn),
         mupel: cell(values, mupelColumn), participantType: cell(values, typeColumn),
         registrationChannel: cell(values, channelColumn),
-      })).filter((row) => row.name || row.whatsapp || row.church || row.registrationMode || row.category || row.mupel || row.participantType || row.registrationChannel);
+        isVip: parseVip(cell(values, vipColumn)) === true,
+        vipInvalid: parseVip(cell(values, vipColumn)) === null,
+      })).filter((row) => row.name || row.whatsapp || row.church || row.registrationMode || row.category || row.mupel || row.participantType || row.registrationChannel || row.isVip || row.vipInvalid);
       if (!rawRows.length) throw new Error("Tidak ada baris peserta di file.");
       if (rawRows.length > 1_000) throw new Error("File berisi lebih dari 1.000 baris peserta. Pecah file sebelum mengimpor.");
       const response = await fetch("/api/import/validate", {
@@ -97,6 +121,7 @@ export default function ImportTool() {
           requestId: row.requestId, name: row.name, whatsapp: row.whatsapp, church: row.church,
           registrationMode: row.registrationMode, category: row.category, mupel: row.mupel,
           participantType: row.participantType, registrationChannel: row.registrationChannel,
+          isVip: row.isVip,
         })) }),
       });
       const result = await response.json() as { ok: boolean; data?: { rows: Array<{ index: number; requestId: string; status: "VALID" | "WARNING" | "ERROR"; message: string; normalized?: Partial<Row>; candidates: Candidate[] }> }; error?: { message?: string } };
@@ -114,14 +139,14 @@ export default function ImportTool() {
           mupel: validation?.normalized?.mupel ?? row.mupel,
           participantType: validation?.normalized?.participantType ?? row.participantType,
           registrationChannel: validation?.normalized?.registrationChannel ?? row.registrationChannel,
-          status: validation?.status ?? "ERROR",
-          message: validation?.message ?? "Hasil validasi tidak tersedia.",
+          status: row.vipInvalid ? "ERROR" : validation?.status ?? "ERROR",
+          message: row.vipInvalid ? "Kolom VIP harus berisi Ya, Tidak, atau kosong." : validation?.message ?? "Hasil validasi tidak tersedia.",
           candidates: validation?.candidates ?? [],
-          include: validation?.status === "VALID",
+          include: !row.vipInvalid && validation?.status === "VALID",
         };
       }));
       setValidated(true);
-      setPreviewFilter(result.data.rows.some((row) => row.status !== "VALID") ? "issues" : "all");
+      setPreviewFilter(rawRows.some((row) => row.vipInvalid) || result.data.rows.some((row) => row.status !== "VALID") ? "issues" : "all");
       setNotice(`${rawRows.length.toLocaleString("id-ID")} baris diperiksa dari ${isCsv ? "file CSV" : `sheet "${sheetName}"`}. Baris bertanda Periksa perlu dipilih satu per satu.`);
   }
 
@@ -168,6 +193,14 @@ export default function ImportTool() {
     setRows((current) => current.map((row) => row.requestId === requestId && row.status !== "ERROR" ? { ...row, include: !row.include } : row));
   }
 
+  function setVip(requestId: string, isVip: boolean) {
+    setRows((current) => current.map((row) => row.requestId === requestId ? { ...row, isVip } : row));
+  }
+
+  function setAllVip(isVip: boolean) {
+    setRows((current) => current.map((row) => row.status === "VALID" || row.status === "WARNING" ? { ...row, isVip } : row));
+  }
+
   async function commit() {
     const selected = rows.filter((row) => row.include && (row.status === "VALID" || row.status === "WARNING"));
     if (!selected.length) { setError("Pilih setidaknya satu peserta yang siap diimpor."); return; }
@@ -183,6 +216,7 @@ export default function ImportTool() {
             requestId: row.requestId, name: row.name, whatsapp: row.whatsapp, church: row.church,
             registrationMode: row.registrationMode, category: row.category, mupel: row.mupel,
             participantType: row.participantType, registrationChannel: row.registrationChannel,
+            isVip: row.isVip,
             confirmDuplicate: row.status === "WARNING" && row.include,
           })) }),
         });
@@ -208,6 +242,7 @@ export default function ImportTool() {
   const warningCount = rows.filter((row) => row.status === "WARNING").length;
   const errorCount = rows.filter((row) => row.status === "ERROR").length;
   const selectedCount = rows.filter((row) => row.include).length;
+  const vipCount = rows.filter((row) => row.isVip && (row.status === "VALID" || row.status === "WARNING")).length;
   const visibleRows = previewFilter === "issues" ? rows.filter((row) => row.status === "WARNING" || row.status === "ERROR") : rows;
   const stage = committed || committing ? 3 : validated ? 2 : 1;
 
@@ -227,7 +262,7 @@ export default function ImportTool() {
         </select>
       </div>}
       <button className={styles.template} type="button" onClick={downloadTemplate}>Unduh template Excel</button>
-      <p>Pilih sheet yang berisi data peserta. Nama dan WhatsApp wajib. Nomor registrasi dibuat otomatis. Maksimal 1.000 baris dan 15 MB. Kolom lain boleh dikosongkan.</p>
+      <p>Pilih sheet Peserta. Nama dan WhatsApp wajib. Isi VIP dengan Ya, Tidak, atau kosong. Nomor registrasi dibuat otomatis. Maksimal 1.000 baris dan 15 MB.</p>
     </div>
     {busy && <p className={styles.status} role="status">Membaca dan memvalidasi file…</p>}
     {error && <p className={styles.error} role="alert">{error}</p>}
@@ -236,20 +271,26 @@ export default function ImportTool() {
       <div className={styles.counts} aria-label="Ringkasan validasi">
         <span><strong>{validCount}</strong> siap</span><span><strong>{warningCount}</strong> perlu diperiksa</span><span><strong>{errorCount}</strong> tidak bisa diimpor</span>
       </div>
-      <p className={styles.reviewHint}>Baris siap dipilih otomatis. Periksa baris bertanda Periksa sebelum mencentangnya. Baris Tidak bisa perlu diperbaiki di file.</p>
+      <p className={styles.reviewHint}>Baris siap dipilih otomatis. Periksa baris bertanda Periksa sebelum mencentangnya. Tanda VIP dari file bisa diubah per baris atau sekaligus. Baris Tidak bisa perlu diperbaiki di file.</p>
       <div className={styles.previewFilters} aria-label="Tampilan pratinjau">
         <button type="button" aria-pressed={previewFilter === "issues"} onClick={() => setPreviewFilter("issues")}>Perlu ditinjau ({warningCount + errorCount})</button>
         <button type="button" aria-pressed={previewFilter === "all"} onClick={() => setPreviewFilter("all")}>Semua baris ({rows.length})</button>
+      </div>
+      <div className={styles.vipControls} aria-label="Penandaan VIP">
+        <span><strong>{vipCount}</strong> baris ditandai VIP</span>
+        <button type="button" disabled={committing || committed} onClick={() => setAllVip(true)}>Tandai semua VIP</button>
+        <button type="button" disabled={committing || committed || vipCount === 0} onClick={() => setAllVip(false)}>Hapus semua tanda VIP</button>
       </div>
       {progress && <div className={styles.progress} role="status">Mengimpor peserta: {progress.done} dari {progress.total}</div>}
       {(summary.imported + summary.skipped + summary.failed > 0) && <div className={styles.summary} role="status"><strong>{summary.imported}</strong> diimpor · <strong>{summary.skipped}</strong> dilewati · <strong>{summary.failed}</strong> gagal</div>}
       <div className={styles.tableWrap} tabIndex={0} aria-label="Pratinjau peserta untuk diimpor">
         <table>
-          <thead><tr><th scope="col">Pilih</th><th scope="col">Baris</th><th scope="col">Peserta</th><th scope="col">Hasil pemeriksaan</th></tr></thead>
-          <tbody>{visibleRows.length === 0 && <tr><td colSpan={4}>Tidak ada baris yang perlu ditinjau.</td></tr>}{visibleRows.map((row) => <tr key={row.requestId}>
+          <thead><tr><th scope="col">Pilih</th><th scope="col">Baris</th><th scope="col">Peserta</th><th scope="col">VIP</th><th scope="col">Hasil pemeriksaan</th></tr></thead>
+          <tbody>{visibleRows.length === 0 && <tr><td colSpan={5}>Tidak ada baris yang perlu ditinjau.</td></tr>}{visibleRows.map((row) => <tr key={row.requestId}>
             <td><input type="checkbox" aria-label={`Pilih baris ${row.line}`} checked={row.include} disabled={committing || committed || row.status === "ERROR" || row.status === "IMPORTED" || row.status === "SKIPPED"} onChange={() => toggleRow(row.requestId)} /></td>
             <td>{row.line}</td>
             <td><strong className={styles.personName}>{row.name || "Nama kosong"}</strong><span className={styles.personPhone}>{row.whatsapp || "Nomor kosong"}</span></td>
+            <td><label className={styles.vipCell}><input type="checkbox" aria-label={`Tamu VIP ${row.name || `baris ${row.line}`}`} checked={row.isVip} disabled={committing || committed || row.status === "ERROR" || row.status === "IMPORTED" || row.status === "SKIPPED"} onChange={(event) => setVip(row.requestId, event.target.checked)} /><span>VIP</span></label></td>
             <td><span className={styles[row.status?.toLowerCase() ?? "error"]}>{statusLabel[row.status ?? "ERROR"]}</span><span className={styles.rowMessage}>{row.message}</span>
               {row.candidates?.map((candidate) => <small className={styles.candidate} key={candidate.registrationCode}>{candidate.registrationCode} · {candidate.name}{candidate.church ? ` · ${candidate.church}` : ""}</small>)}
               {(row.church || row.registrationMode || row.category || row.mupel || row.participantType || row.registrationChannel) && <details className={styles.rowDetails}><summary>Data lain</summary>

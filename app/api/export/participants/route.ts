@@ -15,7 +15,7 @@ export async function GET() {
     const [event] = await db.select({ id: events.id, slug: events.slug }).from(events).where(eq(events.slug, eventSlug)).limit(1);
     if (!event) throw new AppError("EVENT_NOT_FOUND", 404, "Acara aktif belum tersedia.");
     const rows = await db.select({
-      registrationCode: participants.registrationCode, name: participants.name,
+      registrationCode: participants.registrationCode, isVip: participants.isVip, name: participants.name,
       whatsappE164: participants.whatsappE164, church: participants.church,
       registrationMode: participants.registrationMode, category: participants.category,
       mupel: participants.mupel, participantType: participants.participantType,

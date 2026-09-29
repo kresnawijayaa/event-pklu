@@ -17,6 +17,7 @@
 .identity { min-width: 0; }
 .primary, .secondary { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 12px; }
 .code { color: var(--ink-muted); font-size: 12px; font-weight: 700; white-space: nowrap; }
+.vipBadge { padding: 2px 6px; border: 1px solid #b48d3d; border-radius: 4px; background: #fff7df; color: #66480d; font-size: 11px; font-weight: 700; line-height: 1.2; }
 .name { color: var(--ink); font-size: 15px; font-weight: 700; overflow-wrap: anywhere; }
 .church, .secondary { color: var(--ink-muted); font-size: 12px; }
 .secondary { margin-top: 4px; }

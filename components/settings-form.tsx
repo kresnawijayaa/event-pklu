@@ -72,7 +72,7 @@ export default function SettingsForm({ initial }: { initial: SettingsData }) {
         <div className={styles.fields}>
           <label>Nama acara<input required minLength={2} maxLength={160} value={name} onChange={(e) => setName(e.target.value)} /></label>
           <label>Tanggal<input required type="date" value={eventDate} onChange={(e) => setEventDate(e.target.value)} /></label>
-          <label>Prefix registrasi<input required minLength={2} maxLength={20} pattern="[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)*-" value={prefix} onChange={(e) => setPrefix(e.target.value.toUpperCase())} aria-describedby="prefix-help" /><span id="prefix-help">Contoh: PKLU- atau REG-. Prefix baru dipakai untuk nomor registrasi yang dibuat setelah perubahan disimpan. Nomor lama tetap.</span></label>
+          <label>Prefix registrasi<input required minLength={2} maxLength={20} pattern="[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)*-" value={prefix} onChange={(e) => setPrefix(e.target.value.toUpperCase())} aria-describedby="prefix-help" /><span id="prefix-help">Untuk peserta biasa, misalnya PKLU- atau REG-. Tamu VIP selalu memakai VIP-. Perubahan hanya berlaku untuk nomor baru.</span></label>
         </div>
       </section>
       <section className={styles.section} aria-labelledby="template-title">

@@ -43,11 +43,11 @@ async function main() {
       `SELECT column_name FROM information_schema.columns
        WHERE table_schema = 'public' AND table_name = 'participants'
          AND column_name = ANY($1::text[])`,
-      [["registration_mode", "category", "mupel", "participant_type", "registration_channel"]],
+      [["registration_mode", "category", "mupel", "participant_type", "registration_channel", "is_vip"]],
     );
     stage = "participant list";
     await pool.query(
-      `SELECT id, registration_code, name, whatsapp_e164, church,
+      `SELECT id, registration_code, is_vip, name, whatsapp_e164, church,
               registration_mode, category, mupel, participant_type,
               registration_channel, checked_in_at, whatsapp_opened_at,
               whatsapp_confirmed_at, created_at, deleted_at
@@ -62,7 +62,7 @@ async function main() {
     const eventCount = eventResult.rows[0]?.count ?? 0;
     const columnCount = columnsResult.rows.length;
 
-    if (tableCount !== 6 || eventCount !== 1 || columnCount !== 5) {
+    if (tableCount !== 6 || eventCount !== 1 || columnCount !== 6) {
       console.error("Database connected, but schema or default event verification failed.", {
         tables: tableCount, event: eventCount, participantDetailColumns: columnCount,
       });

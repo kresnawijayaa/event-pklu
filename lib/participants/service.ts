@@ -5,6 +5,7 @@ import type { AuthSession } from "@/lib/auth/types";
 import { AppError } from "@/lib/errors";
 import { normalizeIndonesianPhone, normalizePersonText, normalizeSearchText } from "./normalization";
 import type { ParticipantDetailsInput } from "./details";
+import { registrationCode } from "./registration";
 
 export async function getActiveEvent() {
   const slug = process.env.ACTIVE_EVENT_SLUG ?? "pklu-gpib-2026";
@@ -76,6 +77,7 @@ export async function listParticipants(options: {
   const rows = await db.select({
     id: participants.id,
     registrationCode: participants.registrationCode,
+    isVip: participants.isVip,
     name: participants.name,
     whatsappE164: participants.whatsappE164,
     church: participants.church,
@@ -106,6 +108,7 @@ export async function createParticipant(input: {
   name: string;
   whatsapp: string;
   church?: string | null;
+  isVip?: boolean;
   confirmDuplicate: boolean;
 } & ParticipantDetailsInput, session: AuthSession) {
   const eventSlug = process.env.ACTIVE_EVENT_SLUG ?? "pklu-gpib-2026";
@@ -129,14 +132,14 @@ export async function createParticipant(input: {
 
     const sequence = event.nextSequence;
     await tx.update(events).set({ nextSequence: sql`${events.nextSequence} + 1`, updatedAt: new Date() }).where(eq(events.id, event.id));
-    const registrationCode = `${event.registrationPrefix}${String(sequence).padStart(event.registrationPadding, "0")}`;
+    const code = registrationCode(event.registrationPrefix, event.registrationPadding, sequence, input.isVip === true);
     const [participant] = await tx.insert(participants).values({
-      eventId: event.id, sequenceNumber: sequence, registrationCode,
+      eventId: event.id, sequenceNumber: sequence, registrationCode: code, isVip: input.isVip === true,
       ...normalized, source: "MANUAL", sourceRequestId: input.requestId,
     }).returning();
     await tx.insert(auditLogs).values({
       eventId: event.id, participantId: participant.id, actorRole: session.role,
-      actorSessionId: session.sessionId, action: "PARTICIPANT_CREATED", metadata: { source: "MANUAL" },
+      actorSessionId: session.sessionId, action: "PARTICIPANT_CREATED", metadata: { source: "MANUAL", isVip: input.isVip === true },
     });
     return { participant, duplicateCandidates: [], replayed: false };
   });

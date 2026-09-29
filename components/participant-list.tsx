@@ -9,7 +9,7 @@ import WhatsAppActions from "@/components/whatsapp-actions";
 import styles from "./participant-list.module.css";
 
 type Participant = {
-  id: string; registrationCode: string; name: string; whatsappE164: string; church: string | null;
+  id: string; registrationCode: string; isVip: boolean; name: string; whatsappE164: string; church: string | null;
   registrationMode: string | null; category: string | null; mupel: string | null;
   participantType: string | null; registrationChannel: string | null;
   checkedInAt: string | null; deletedAt: string | null;
@@ -122,7 +122,7 @@ export default function ParticipantList({ role, deleted = false }: { role: Acces
       {items.map((item) => <article className={styles.row} key={item.id}>
         <div className={styles.rowMain}>
           <div className={styles.identity}>
-            <div className={styles.primary}><strong className={styles.code}>{item.registrationCode}</strong><strong className={styles.name}>{item.name}</strong>{item.church && <span className={styles.church}>{item.church}</span>}</div>
+            <div className={styles.primary}><strong className={styles.code}>{item.registrationCode}</strong>{item.isVip && <span className={styles.vipBadge}>VIP</span>}<strong className={styles.name}>{item.name}</strong>{item.church && <span className={styles.church}>{item.church}</span>}</div>
             <div className={styles.secondary}><span>{item.whatsappE164}</span>{deleted && item.deletedAt && <span>Terhapus {new Date(item.deletedAt).toLocaleDateString("id-ID", { timeZone: "Asia/Jakarta" })}</span>}</div>
           </div>
           <div className={styles.rowSide}>

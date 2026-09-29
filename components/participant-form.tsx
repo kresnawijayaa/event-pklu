@@ -10,6 +10,7 @@ type Result = { ok: boolean; data?: { participant: { registrationCode: string; n
 export default function ParticipantForm() {
   const [name, setName] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
+  const [isVip, setIsVip] = useState(false);
   const [church, setChurch] = useState("");
   const [registrationMode, setRegistrationMode] = useState("");
   const [category, setCategory] = useState("");
@@ -30,7 +31,7 @@ export default function ParticipantForm() {
     try {
       const response = await fetch("/api/participants", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ requestId, name, whatsapp, church: church || null,
+        body: JSON.stringify({ requestId, name, whatsapp, church: church || null, isVip,
           registrationMode, category, mupel, participantType, registrationChannel, confirmDuplicate }),
       });
       const result = await response.json() as Result;
@@ -41,7 +42,7 @@ export default function ParticipantForm() {
       }
       if (!response.ok || !result.ok || !result.data) throw new Error(result.error?.message ?? "Data belum berhasil disimpan.");
       setSuccess(result.data.participant);
-      setName(""); setWhatsapp(""); setChurch(""); setRegistrationMode(""); setCategory(""); setMupel(""); setParticipantType(""); setRegistrationChannel(""); setCandidates([]); setConfirmDuplicate(false); setRequestId(crypto.randomUUID());
+      setName(""); setWhatsapp(""); setIsVip(false); setChurch(""); setRegistrationMode(""); setCategory(""); setMupel(""); setParticipantType(""); setRegistrationChannel(""); setCandidates([]); setConfirmDuplicate(false); setRequestId(crypto.randomUUID());
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Koneksi bermasalah. Coba lagi.");
     } finally { setBusy(false); }
@@ -50,6 +51,7 @@ export default function ParticipantForm() {
   return <form className={styles.form} onSubmit={save}>
     <div className={styles.field}><label htmlFor="participant-name">Nama lengkap</label><input ref={nameRef} id="participant-name" name="name" required minLength={2} maxLength={120} autoComplete="name" value={name} onChange={(e) => setName(e.target.value)} /></div>
     <div className={styles.field}><label htmlFor="participant-whatsapp">Nomor WhatsApp</label><input id="participant-whatsapp" name="whatsapp" type="tel" inputMode="tel" autoComplete="tel" required maxLength={40} value={whatsapp} onChange={(e) => setWhatsapp(e.target.value)} /></div>
+    <label className={styles.vipOption}><input type="checkbox" checked={isVip} onChange={(e) => setIsVip(e.target.checked)} /><span><strong>Tamu VIP</strong><small>Nomor registrasi memakai awalan VIP-.</small></span></label>
     <details className={styles.optional}>
       <summary>Data tambahan (opsional)</summary>
       <div className={styles.field}><label htmlFor="participant-church">Asal jemaat</label><input id="participant-church" name="church" maxLength={120} value={church} onChange={(e) => setChurch(e.target.value)} /></div>

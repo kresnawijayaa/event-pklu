@@ -15,14 +15,14 @@ export function formatJakartaTimestamp(value: Date | null) {
 }
 
 export function buildParticipantsCsv(rows: Array<{
-  registrationCode: string; name: string; whatsappE164: string; church: string | null;
+  registrationCode: string; isVip?: boolean; name: string; whatsappE164: string; church: string | null;
   registrationMode?: string | null; category?: string | null; mupel?: string | null;
   participantType?: string | null; registrationChannel?: string | null;
   createdAt: Date; checkedInAt: Date | null;
 }>) {
   const values: Array<Array<string | number | null | undefined>> = [
-    ["Nomor Registrasi", "Nama", "WhatsApp", "Asal Jemaat", "Mode", "Kategori", "Asal Mupel", "Tipe", "Daftar", "Terdaftar (WIB)", "Check-in (WIB)"],
-    ...rows.map((row) => [row.registrationCode, row.name, row.whatsappE164, row.church,
+    ["Nomor Registrasi", "VIP", "Nama", "WhatsApp", "Asal Jemaat", "Mode", "Kategori", "Asal Mupel", "Tipe", "Daftar", "Terdaftar (WIB)", "Check-in (WIB)"],
+    ...rows.map((row) => [row.registrationCode, row.isVip ? "Ya" : "Tidak", row.name, row.whatsappE164, row.church,
       row.registrationMode, row.category, row.mupel, row.participantType, row.registrationChannel,
       formatJakartaTimestamp(row.createdAt), formatJakartaTimestamp(row.checkedInAt)]),
   ];

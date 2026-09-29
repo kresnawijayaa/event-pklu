@@ -102,6 +102,7 @@ export const participants = pgTable(
       .references(() => events.id),
     sequenceNumber: integer("sequence_number").notNull(),
     registrationCode: varchar("registration_code", { length: 40 }).notNull(),
+    isVip: boolean("is_vip").notNull().default(false),
     name: varchar("name", { length: 120 }).notNull(),
     nameNormalized: varchar("name_normalized", { length: 120 }).notNull(),
     whatsappE164: varchar("whatsapp_e164", { length: 20 }).notNull(),

@@ -47,6 +47,7 @@
 .result { gap: 18px; padding: 15px; border: 1px solid var(--line); border-radius: 9px; background: var(--surface-muted); }
 .result > div { min-width: 0; }
 .code { display: inline-block; margin-bottom: 3px; font-weight: 600; }
+.vipBadge { display: inline-block; margin-left: 8px; padding: 2px 6px; border: 1px solid #b48d3d; border-radius: 4px; background: #fff7df; color: #66480d; font-size: 11px; font-weight: 700; }
 .result h2 { font-size: 18px; }
 .result .waiting, .result .timestamp { display: inline-flex; align-items: center; min-height: 25px; margin-top: 9px; padding: 2px 8px; border-radius: 5px; background: #fff7ed; color: #854d0e; font-size: 12px; font-weight: 600; }
 .result .timestamp { background: #eaf7ef; color: #166534; }
