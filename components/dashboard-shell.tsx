@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { CircleHelp, ClipboardCheck, FileUp, House, Settings2, UserRoundPlus, UsersRound } from "lucide-react";
 import type { AccessRole } from "@/lib/auth/types";
@@ -27,8 +28,11 @@ export default function DashboardShell({ role, children }: { role: AccessRole; c
       <DashboardBackground />
       <header className={styles.topbar}>
         <div className={styles.identity}>
-          <Link className={styles.brand} href="/" aria-label="PKLU, ke beranda">PKLU<span>2026</span></Link>
-          <a className={styles.churchLink} href="https://gpib.or.id" target="_blank" rel="noopener noreferrer">GPIB</a>
+          <Link className={styles.logoLink} href="/" aria-label="PKLU, ke beranda"><Image src="/pklu-hut-16.png" width={44} height={44} alt="" priority /></Link>
+          <div className={styles.identityCopy}>
+            <Link className={styles.brand} href="/">PKLU<span>2026</span></Link>
+            <a className={styles.churchLink} href="https://gpib.or.id" target="_blank" rel="noopener noreferrer">GPIB</a>
+          </div>
         </div>
         <nav className={styles.desktopNav} aria-label="Menu utama">
           <Link href="/" aria-current={pathname === "/" ? "page" : undefined}>Beranda</Link>
@@ -53,7 +57,7 @@ export default function DashboardShell({ role, children }: { role: AccessRole; c
         <Link href="/import" aria-current={pathname === "/import" ? "page" : undefined}><FileUp aria-hidden="true" />Impor</Link>
         <Link href="/settings" aria-label="Pengaturan" aria-current={pathname === "/settings" ? "page" : undefined}><Settings2 aria-hidden="true" />Atur</Link>
       </nav>
-      <footer className={styles.footer}>PKLU 2026 <span>·</span> <a href="https://gpib.or.id" target="_blank" rel="noopener noreferrer">GPIB</a></footer>
+      <footer className={styles.footer}><Image src="/pklu-hut-16.png" width={28} height={28} alt="" />PKLU 2026 <span>·</span> <a href="https://gpib.or.id" target="_blank" rel="noopener noreferrer">GPIB</a></footer>
     </div>
   );
 }

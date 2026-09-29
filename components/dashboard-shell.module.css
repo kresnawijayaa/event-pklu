@@ -1,7 +1,10 @@
 .frame { position: relative; isolation: isolate; min-height: 100svh; display: flex; flex-direction: column; background: var(--ambient-background); background-size: var(--ambient-size); background-repeat: no-repeat; }
 .topbar, .main, .footer { position: relative; z-index: 1; }
 .topbar { width: min(100% - 48px, 1180px); min-height: 90px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 24px; border-bottom: 1px solid var(--canvas-line); }
-.identity { min-width: 0; display: flex; flex-direction: column; gap: 2px; flex-shrink: 0; }
+.identity { min-width: 0; display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.logoLink { width: 44px; height: 44px; display: block; flex: none; border: 1px solid var(--canvas-line); border-radius: 50%; overflow: hidden; }
+.logoLink img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.identityCopy { display: flex; flex-direction: column; gap: 2px; }
 .brand { display: flex; align-items: baseline; gap: 9px; color: var(--canvas-text); font-size: 18px; font-weight: 700; letter-spacing: -.03em; text-decoration: none; }
 .brand span { color: var(--canvas-muted); font-size: 12px; font-weight: 600; letter-spacing: .02em; }
 .churchLink { color: var(--canvas-muted); font-size: 13px; text-decoration: none; }
@@ -19,7 +22,8 @@
 .account button:hover:not(:disabled) { border-color: #94a3b8; background: var(--surface-muted); }
 .account button:disabled { opacity: .6; }
 .main { width: min(100% - 48px, 1180px); margin: 0 auto; flex: 1; padding: 28px 0 52px; }
-.footer { padding: 16px 24px; border-top: 1px solid var(--canvas-line); color: var(--canvas-muted); font-size: 12px; text-align: center; }
+.footer { min-height: 62px; display: flex; align-items: center; justify-content: center; gap: 4px; padding: 10px 24px; border-top: 1px solid var(--canvas-line); color: var(--canvas-muted); font-size: 12px; text-align: center; }
+.footer img { width: 28px; height: 28px; margin-right: 7px; border: 1px solid var(--canvas-line); border-radius: 50%; }
 .footer span { padding: 0 5px; }
 .mobileNav { display: none; }
 @media (max-width: 1050px) {
@@ -46,3 +50,4 @@
   .mobileNav.sixItemMobileNav a svg { width: 19px; height: 19px; }
 }
 @media (max-width: 390px) { .role { display: none; } }
+@media (max-width: 390px) { .identity { gap: 7px; } .logoLink { width: 38px; height: 38px; } }

@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { getDashboardSummary } from "@/lib/dashboard";
 import styles from "./dashboard.module.css";
 
@@ -31,6 +32,7 @@ export default async function DashboardPage() {
           <h1>Ringkasan acara</h1>
           <p className={styles.date}>{summary.event.name} <span aria-hidden="true">·</span> {formatEventDate(summary.event.eventDate)}</p>
         </div>
+        <Image className={styles.eventLogo} src="/pklu-hut-16.png" width={88} height={88} alt="Logo HUT ke-16 Pelkat PKLU GPIB" priority />
       </div>
       <section className={styles.metrics} aria-label="Statistik acara">
         {metrics.map((metric, index) => (

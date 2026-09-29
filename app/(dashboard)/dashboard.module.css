@@ -1,5 +1,6 @@
 .page { max-width: 1060px; margin: 0 auto; }
-.heading { padding-bottom: 16px; }
+.heading { min-height: 98px; display: flex; align-items: center; justify-content: space-between; gap: 18px; padding-bottom: 16px; }
+.eventLogo { width: 88px; height: 88px; flex: none; border: 1px solid var(--canvas-line); border-radius: 50%; object-fit: cover; }
 .heading h1 { margin: 0; color: var(--canvas-text); font-size: clamp(24px, 2.4vw, 30px); font-weight: 650; line-height: 1.2; letter-spacing: -.035em; }
 .date { margin: 6px 0 0; color: var(--canvas-muted); font-size: 14px; }
 .date span { padding: 0 5px; }
@@ -32,3 +33,4 @@
 @media (max-width: 760px) { .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); } .metric:first-child { grid-column: 1 / -1; } .metric { min-height: 100px; padding: 14px; } .metric strong, .metric strong.primaryValue { font-size: 28px; } }
 @media (max-width: 600px) { .nextAction { align-items: stretch; flex-direction: column; gap: 12px; padding: 15px; } .nextAction a { align-self: flex-start; } }
 @media (max-width: 600px) { .workflow li { grid-template-columns: 28px minmax(0, 1fr); gap: 6px 10px; padding: 13px 14px; } .workflowHeading { padding: 14px; } .stepLinks { grid-column: 2; justify-content: flex-start; } .workflow li p { font-size: 13px; } }
+@media (max-width: 600px) { .heading { min-height: 74px; gap: 10px; } .eventLogo { width: 60px; height: 60px; } }

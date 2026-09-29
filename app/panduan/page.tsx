@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { Metadata } from "next";
 import styles from "./page.module.css";
 
@@ -7,7 +8,10 @@ export const metadata: Metadata = { title: "Panduan penggunaan | PKLU GPIB 2026"
 export default function GuidePage() {
   return <div className={styles.shell}>
     <header className={styles.header}>
-      <div className={styles.identity}><Link href="/" className={styles.brand}>PKLU <span>2026</span></Link><a href="https://gpib.or.id" target="_blank" rel="noopener noreferrer">GPIB</a></div>
+      <div className={styles.identity}>
+        <Link href="/" className={styles.logoLink} aria-label="PKLU, ke beranda"><Image src="/pklu-hut-16.png" width={44} height={44} alt="" priority /></Link>
+        <div className={styles.identityCopy}><Link href="/" className={styles.brand}>PKLU <span>2026</span></Link><a href="https://gpib.or.id" target="_blank" rel="noopener noreferrer">GPIB</a></div>
+      </div>
       <Link href="/" className={styles.back}>Ke aplikasi</Link>
     </header>
     <main className={styles.main}>
@@ -78,6 +82,6 @@ export default function GuidePage() {
       </div>
       <div className={styles.finish}><strong>Siap mulai?</strong><p>Masukkan data peserta lebih dulu. Setelah itu, gunakan halaman Peserta untuk mengirim pesan dan halaman Check-in saat acara.</p><Link href="/">Ke aplikasi</Link></div>
     </main>
-    <footer className={styles.footer}>PKLU 2026 · <a href="https://gpib.or.id" target="_blank" rel="noopener noreferrer">GPIB</a></footer>
+    <footer className={styles.footer}><Image src="/pklu-hut-16.png" width={28} height={28} alt="" />PKLU 2026 · <a href="https://gpib.or.id" target="_blank" rel="noopener noreferrer">GPIB</a></footer>
   </div>;
 }
