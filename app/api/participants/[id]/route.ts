@@ -13,6 +13,8 @@ export const runtime = "nodejs";
 const updateSchema = z.object({
   name: z.string().max(500), whatsapp: z.string().max(40),
   church: z.string().max(500).nullable().optional(), confirmDuplicate: z.boolean().default(false),
+  isVip: z.boolean().optional(), confirmVipChange: z.boolean().default(false),
+  expectedCurrentCode: z.string().max(40).optional(), expectedNewCode: z.string().max(40).optional(),
   ...participantDetailsSchema,
 });
 

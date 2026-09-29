@@ -36,8 +36,9 @@
 .error { color: var(--error); }
 .empty a, .empty button { color: var(--forest); font: inherit; font-weight: 600; text-underline-offset: 3px; }
 .empty button { display: block; min-height: 40px; margin-top: 8px; padding: 0; border: 0; background: transparent; text-decoration: underline; cursor: pointer; }
-.actions { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 20px 4px; border-top: 1px solid var(--line); color: var(--ink-muted); font-size: 13px; }
-.actions a { min-height: 38px; display: inline-flex; align-items: center; padding: 0 12px; border: 1px solid #a8b6ad; border-radius: 7px; color: var(--forest-deep); font-weight: 700; text-decoration: none; }
+.actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 20px 4px; border-top: 1px solid var(--line); color: var(--ink-muted); font-size: 13px; }
+.actions a { min-height: 44px; display: inline-flex; align-items: center; padding: 0 12px; border: 1px solid #a8b6ad; border-radius: 7px; color: var(--forest-deep); font-weight: 700; text-decoration: none; }
+.downloads { display: flex; flex-wrap: wrap; gap: 8px; }
 .pagination { display: flex; gap: 8px; padding: 6px 20px 12px; }
 .pagination button { min-height: 40px; padding: 0 14px; border: 1px solid #a8b6ad; border-radius: 7px; background: white; color: var(--forest-deep); font-size: 13px; font-weight: 700; cursor: pointer; }
 .add { display: flex; flex-wrap: wrap; gap: 8px 18px; margin: 0; padding: 4px 20px 12px; }

@@ -1,8 +1,11 @@
 .form { width: 100%; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; padding: 18px; border: 1px solid var(--line); border-radius: 10px; background: #fff; }
 .form label { display: flex; flex-direction: column; gap: 6px; color: var(--ink-muted); font-size: 13px; font-weight: 600; }
 .form label:first-child, .form label:nth-child(3), .matches, .message, .actions { grid-column: 1 / -1; }
+.form .vipOption { grid-column: 1 / -1; display: flex; flex-direction: row; align-items: center; gap: 10px; min-height: 44px; cursor: pointer; }
+.form .vipOption input { width: 20px; min-height: 20px; height: 20px; flex: none; accent-color: var(--forest); }
+.codeChange { grid-column: 1 / -1; margin: -8px 0 0; padding: 10px 12px; border: 1px solid #d4b56f; border-radius: 7px; background: #fff8e8; color: #614913; font-size: 13px; line-height: 1.5; }
 .form input { width: 100%; min-height: 44px; padding: 9px 12px; border: 1px solid #cbd5e1; border-radius: 7px; background: white; color: var(--ink); font-size: 15px; }
-.form input:focus-visible { border-color: var(--forest); }
+.form input:focus-visible { outline: 3px solid var(--turmeric); outline-offset: 2px; }
 .matches { padding: 12px; border-radius: 7px; background: #fffbeb; }
 .matches strong { font-size: 14px; }
 .matches p { margin: 5px 0 0; font-size: 13px; }
@@ -11,4 +14,4 @@
 .actions button { min-height: 44px; padding: 0 15px; border: 1px solid var(--forest); border-radius: 7px; background: var(--forest); color: white; font-size: 14px; font-weight: 600; cursor: pointer; }
 .actions button.cancel { background: white; color: var(--forest); }
 .actions button:disabled { opacity: .6; cursor: wait; }
-@media (max-width: 560px) { .form { grid-template-columns: 1fr; padding: 14px; } .form label, .form label:first-child, .form label:nth-child(3), .matches, .message, .actions { grid-column: auto; } .actions button { flex: 1; } }
+@media (max-width: 560px) { .form { grid-template-columns: 1fr; padding: 14px; } .form label, .form label:first-child, .form label:nth-child(3), .form .vipOption, .codeChange, .matches, .message, .actions { grid-column: auto; } .actions button { flex: 1; } }

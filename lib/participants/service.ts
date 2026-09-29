@@ -76,6 +76,7 @@ export async function listParticipants(options: {
   }
   const rows = await db.select({
     id: participants.id,
+    sequenceNumber: participants.sequenceNumber,
     registrationCode: participants.registrationCode,
     isVip: participants.isVip,
     name: participants.name,
@@ -97,7 +98,7 @@ export async function listParticipants(options: {
   const page = hasMore ? rows.slice(0, options.limit) : rows;
   const last = page.at(-1);
   return {
-    event: { whatsappTemplate: event.whatsappTemplate, eventDate: event.eventDate },
+    event: { whatsappTemplate: event.whatsappTemplate, eventDate: event.eventDate, registrationPrefix: event.registrationPrefix, registrationPadding: event.registrationPadding },
     participants: page,
     nextCursor: hasMore && last ? Buffer.from(JSON.stringify({ createdAt: last.createdAt.toISOString(), id: last.id })).toString("base64url") : null,
   };
@@ -147,14 +148,32 @@ export async function createParticipant(input: {
 
 export async function updateParticipant(id: string, input: {
   name: string; whatsapp: string; church?: string | null; confirmDuplicate: boolean;
+  isVip?: boolean; confirmVipChange?: boolean;
+  expectedCurrentCode?: string; expectedNewCode?: string;
 } & ParticipantDetailsInput, session: AuthSession) {
-  const event = await getActiveEvent();
+  const eventSlug = process.env.ACTIVE_EVENT_SLUG ?? "pklu-gpib-2026";
   const normalized = normalizeParticipantInput(input);
   return db.transaction(async (tx) => {
+    const [event] = await tx.select().from(events).where(eq(events.slug, eventSlug)).for("update").limit(1);
+    if (!event) throw new AppError("EVENT_NOT_FOUND", 404, "Acara aktif belum tersedia.");
     const [current] = await tx.select().from(participants).where(and(
       eq(participants.id, id), eq(participants.eventId, event.id), isNull(participants.deletedAt),
-    )).limit(1);
+    )).for("update").limit(1);
     if (!current) throw new AppError("NOT_FOUND", 404, "Peserta tidak ditemukan.");
+    if (input.expectedCurrentCode && input.expectedCurrentCode !== current.registrationCode) {
+      throw new AppError("REGISTRATION_CODE_CHANGED", 409, "Nomor registrasi sudah berubah. Muat ulang daftar peserta, lalu periksa kembali.");
+    }
+    const nextVip = input.isVip ?? current.isVip;
+    const vipChanged = nextVip !== current.isVip;
+    const nextCode = vipChanged
+      ? registrationCode(event.registrationPrefix, event.registrationPadding, current.sequenceNumber, nextVip)
+      : current.registrationCode;
+    if (vipChanged && !input.confirmVipChange) {
+      throw new AppError("VIP_CHANGE_CONFIRMATION_REQUIRED", 409, "Perubahan status VIP dan nomor registrasi perlu dikonfirmasi.");
+    }
+    if (vipChanged && (input.expectedCurrentCode !== current.registrationCode || input.expectedNewCode !== nextCode)) {
+      throw new AppError("REGISTRATION_CODE_CHANGED", 409, "Nomor registrasi sudah berubah. Muat ulang daftar peserta, lalu periksa kembali.");
+    }
     const duplicates = await tx.select({
       id: participants.id, registrationCode: participants.registrationCode, name: participants.name, church: participants.church,
     }).from(participants).where(and(
@@ -172,10 +191,10 @@ export async function updateParticipant(id: string, input: {
       participantType: input.participantType === undefined ? current.participantType : normalized.participantType,
       registrationChannel: input.registrationChannel === undefined ? current.registrationChannel : normalized.registrationChannel,
     };
-    const [participant] = await tx.update(participants).set({ ...normalized, ...details, updatedAt: new Date() }).where(eq(participants.id, id)).returning();
+    const [participant] = await tx.update(participants).set({ ...normalized, ...details, isVip: nextVip, registrationCode: nextCode, updatedAt: new Date() }).where(eq(participants.id, id)).returning();
     await tx.insert(auditLogs).values({
       eventId: event.id, participantId: id, actorRole: session.role, actorSessionId: session.sessionId,
-      action: "PARTICIPANT_UPDATED", metadata: {},
+      action: "PARTICIPANT_UPDATED", metadata: vipChanged ? { oldCode: current.registrationCode, newCode: nextCode, isVip: nextVip } : {},
     });
     return { participant, duplicateCandidates: [] };
   });

@@ -50,8 +50,9 @@ export default function GuidePage() {
       <section id="peserta" className={styles.section}>
         <div className={styles.sectionNumber}>03</div>
         <div><h2>Periksa peserta dan kirim pesan</h2>
-          <p>Di halaman <Link href="/participants">Peserta</Link>, cari nama, nomor registrasi, atau nomor WhatsApp. Nomor dan status hadir terlihat pada tiap baris. Pilih ikon pensil untuk mengubah data.</p>
+          <p>Di halaman <Link href="/participants">Peserta</Link>, cari nama, nomor registrasi, atau nomor WhatsApp. Nomor dan status hadir terlihat pada tiap baris. Pilih ikon pensil untuk mengubah data, termasuk status VIP. Jika status VIP diubah, periksa nomor registrasi baru dan konfirmasi perubahan. Nomor lama tidak berlaku.</p>
           <p>Pilih <strong>WhatsApp</strong> pada baris peserta. Nomor tujuan dan pesan sudah disiapkan. Periksa pesan lalu tekan Kirim di WhatsApp. Tautan bisa dibuka lagi kapan saja.</p>
+          <p>Pilih <strong>Unduh Excel lengkap</strong> untuk menyimpan seluruh data peserta aktif, termasuk nomor registrasi, VIP, WhatsApp, dan status kehadiran.</p>
         </div>
       </section>
 

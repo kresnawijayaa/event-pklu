@@ -9,12 +9,13 @@ import WhatsAppActions from "@/components/whatsapp-actions";
 import styles from "./participant-list.module.css";
 
 type Participant = {
-  id: string; registrationCode: string; isVip: boolean; name: string; whatsappE164: string; church: string | null;
+  id: string; sequenceNumber: number; registrationCode: string; isVip: boolean; name: string; whatsappE164: string; church: string | null;
   registrationMode: string | null; category: string | null; mupel: string | null;
   participantType: string | null; registrationChannel: string | null;
   checkedInAt: string | null; deletedAt: string | null;
 };
-type ListResult = { ok: boolean; data?: { participants: Participant[]; nextCursor: string | null; event: { whatsappTemplate: string; eventDate: string } }; error?: { message?: string } };
+type EventInfo = { whatsappTemplate: string; eventDate: string; registrationPrefix: string; registrationPadding: number };
+type ListResult = { ok: boolean; data?: { participants: Participant[]; nextCursor: string | null; event: EventInfo }; error?: { message?: string } };
 
 export default function ParticipantList({ role, deleted = false }: { role: AccessRole; deleted?: boolean }) {
   const [query, setQuery] = useState("");
@@ -28,7 +29,7 @@ export default function ParticipantList({ role, deleted = false }: { role: Acces
   const [busy, setBusy] = useState(true);
   const [error, setError] = useState("");
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [event, setEvent] = useState<{ whatsappTemplate: string; eventDate: string } | null>(null);
+  const [event, setEvent] = useState<EventInfo | null>(null);
   const requestSequence = useRef(0);
   const listRef = useRef<HTMLDivElement>(null);
   const hasActiveSearch = Boolean(search) || attendance !== "all";
@@ -137,12 +138,12 @@ export default function ParticipantList({ role, deleted = false }: { role: Acces
             </div>
           </div>
         </div>
-        {editingId === item.id && <div className={styles.editorPanel} id={`participant-editor-${item.id}`}><ParticipantEditor participant={item} onCancel={() => setEditingId(null)} onSaved={() => { setEditingId(null); setBusy(true); void load(search, pageCursors[pageIndex] ?? null, attendance); }} /></div>}
+        {editingId === item.id && event && <div className={styles.editorPanel} id={`participant-editor-${item.id}`}><ParticipantEditor participant={item} registrationPrefix={event.registrationPrefix} registrationPadding={event.registrationPadding} onCancel={() => setEditingId(null)} onSaved={() => { setEditingId(null); setBusy(true); void load(search, pageCursors[pageIndex] ?? null, attendance); }} /></div>}
       </article>)}
     </div>}
     <div className={styles.actions}>
       <span>{items.length ? `${items.length} peserta · halaman ${pageIndex + 1}` : "0 peserta"}</span>
-      {!deleted && role === "ADMIN" && <a href="/api/export/participants">Unduh CSV</a>}
+      {!deleted && <div className={styles.downloads}><a href="/api/export/participants/excel">Unduh Excel lengkap</a>{role === "ADMIN" && <a href="/api/export/participants">Unduh CSV</a>}</div>}
     </div>
     {(pageIndex > 0 || nextCursor) && <div className={styles.pagination} aria-label="Navigasi halaman peserta">
       <button type="button" disabled={busy || pageIndex === 0} onClick={() => { listRef.current?.scrollIntoView(); setBusy(true); setError(""); setEditingId(null); setPageIndex((index) => index - 1); }}>Sebelumnya</button>
