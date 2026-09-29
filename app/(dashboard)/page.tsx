@@ -25,7 +25,7 @@ export default async function DashboardPage() {
     : pendingWhatsApp > 0
       ? { title: `${pendingWhatsApp.toLocaleString("id-ID")} WhatsApp belum dikonfirmasi`, detail: "Gunakan filter WhatsApp di daftar peserta, kirim pesan, lalu tandai yang sudah terkirim.", href: "/participants", label: "Lihat peserta" }
       : summary.notCheckedIn > 0
-        ? { title: "Data peserta siap untuk check-in", detail: "Saat peserta datang, cari nama atau kode PKLU lalu catat kehadirannya.", href: "/check-in", label: "Buka check-in" }
+        ? { title: "Data peserta siap untuk check-in", detail: "Saat peserta datang, cari nama atau nomor registrasi lalu catat kehadirannya.", href: "/check-in", label: "Buka check-in" }
         : { title: "Semua peserta sudah tercatat hadir", detail: "Ringkasan di atas menunjukkan data terbaru yang tersimpan.", href: "/participants", label: "Lihat peserta" };
 
   return (

@@ -30,7 +30,7 @@ export default function CheckInSearch() {
       const result = await response.json() as SearchResult;
       if (!response.ok || !result.ok || !result.data) throw new Error(result.error?.message ?? "Pencarian belum berhasil.");
       setItems(result.data.participants);
-      if (!result.data.participants.length) setMessage("Peserta tidak ditemukan. Coba nama, kode PKLU, atau nomor WhatsApp lain.");
+      if (!result.data.participants.length) setMessage("Peserta tidak ditemukan. Coba nama, nomor registrasi, atau nomor WhatsApp lain.");
     } catch (error) { setItems([]); setMessage(error instanceof Error ? error.message : "Koneksi bermasalah."); }
     finally { setBusy(false); }
   }

@@ -10,7 +10,7 @@ export const metadata: Metadata = { title: "Pengaturan acara | PKLU GPIB 2026" }
 
 export default async function SettingsPage() {
   try {
-    await requireRole(["ADMIN"]);
+    await requireRole(["STAFF", "ADMIN"]);
   } catch (error) {
     if (error instanceof AppError && error.status === 401) redirect("/login");
     if (error instanceof AppError && error.status === 403) redirect("/");

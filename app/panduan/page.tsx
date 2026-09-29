@@ -14,17 +14,17 @@ export default function GuidePage() {
       <div className={styles.intro}>
         <p className={styles.kicker}>Untuk panitia</p>
         <h1>Panduan penggunaan</h1>
-        <p>Web ini menyimpan data peserta, menyiapkan pesan WhatsApp, dan mencatat siapa yang sudah hadir. Nomor peserta seperti <strong>PKLU-001</strong> dibuat otomatis saat data disimpan.</p>
+        <p>Web ini menyimpan data peserta, menyiapkan pesan WhatsApp, dan mencatat siapa yang sudah hadir. Nomor registrasi dibuat otomatis saat data disimpan. Awal nomornya mengikuti prefix di Pengaturan.</p>
       </div>
 
       <nav className={styles.contents} aria-label="Isi panduan">
-        <a href="#mulai">Masuk</a><a href="#data">Masukkan data</a><a href="#peserta">Peserta dan WhatsApp</a><a href="#checkin">Check-in</a><a href="#ringkasan">Ringkasan</a>
+        <a href="#mulai">Masuk</a><a href="#data">Masukkan data</a><a href="#peserta">Peserta dan WhatsApp</a><a href="#checkin">Check-in</a><a href="#ringkasan">Ringkasan</a><a href="#pengaturan">Pengaturan</a>
       </nav>
 
       <div className={styles.manual}>
       <section id="mulai" className={styles.section}>
         <div className={styles.sectionNumber}>01</div>
-        <div><h2>Masuk dengan PIN</h2><p>Buka halaman <Link href="/login">Masuk</Link> dan isi PIN panitia. Setelah berhasil, Anda masuk ke Beranda. PIN Admin membuka fitur tambahan seperti Pengaturan dan pemulihan data terhapus.</p></div>
+        <div><h2>Masuk dengan PIN</h2><p>Buka halaman <Link href="/login">Masuk</Link> dan isi PIN panitia. Setelah berhasil, Anda masuk ke Beranda. Panitia dan Admin bisa memakai Pengaturan. Hanya Admin yang bisa memulihkan data terhapus.</p></div>
       </section>
 
       <section id="data" className={styles.section}>
@@ -36,7 +36,7 @@ export default function GuidePage() {
             <li>Unduh template Excel dari halaman Impor jika belum punya format file. Isi data pada sheet pertama, lalu ikuti tahap Pilih file, Periksa data, dan Lihat hasil.</li>
             <li>Baris bertanda Periksa perlu ditinjau sebelum dipilih. Baris Tidak bisa harus diperbaiki di Excel, lalu file diunggah kembali.</li>
             <li>Jika data serupa ditemukan, periksa nama dan nomor WhatsApp sebelum memilih baris itu.</li>
-            <li>Jangan membuat nomor registrasi di Excel. Sistem membuat kode <strong>PKLU-...</strong> saat peserta tersimpan.</li>
+            <li>Jangan membuat nomor registrasi di Excel. Sistem membuatnya saat peserta tersimpan.</li>
           </ul>
         </div>
       </section>
@@ -44,7 +44,7 @@ export default function GuidePage() {
       <section id="peserta" className={styles.section}>
         <div className={styles.sectionNumber}>03</div>
         <div><h2>Periksa peserta dan kirim pesan</h2>
-          <p>Di halaman <Link href="/participants">Peserta</Link>, cari nama, kode PKLU, atau nomor WhatsApp. Buka baris peserta untuk melihat nomor dan data lain. Gunakan <strong>Edit data</strong> bila ada yang perlu diperbaiki.</p>
+          <p>Di halaman <Link href="/participants">Peserta</Link>, cari nama, nomor registrasi, atau nomor WhatsApp. Buka baris peserta untuk melihat nomor dan data lain. Gunakan <strong>Edit data</strong> bila ada yang perlu diperbaiki.</p>
           <p>Pilih <strong>Buka WhatsApp</strong>. Nomor tujuan dan pesan sudah disiapkan. Periksa lalu tekan Kirim di WhatsApp. Setelah terkirim, kembali ke web dan pilih <strong>Konfirmasi terkirim</strong>. Membuka WhatsApp saja belum berarti pesan sudah dikirim.</p>
         </div>
       </section>
@@ -52,14 +52,26 @@ export default function GuidePage() {
       <section id="checkin" className={styles.section}>
         <div className={styles.sectionNumber}>04</div>
         <div><h2>Catat kehadiran saat peserta datang</h2>
-          <p>Buka <Link href="/check-in">Check-in</Link>. Cari kode PKLU, nama, atau nomor WhatsApp. Cocokkan nama, kode, dan nomor pada hasil pencarian, lalu pilih <strong>Catat hadir</strong>. Setelah berhasil, pilih <strong>Cari peserta berikutnya</strong>. Jika peserta sudah tercatat hadir, waktunya tetap memakai check-in pertama.</p>
+          <p>Buka <Link href="/check-in">Check-in</Link>. Cari nomor registrasi, nama, atau nomor WhatsApp. Cocokkan data pada hasil pencarian, lalu pilih <strong>Catat hadir</strong>. Setelah berhasil, pilih <strong>Cari peserta berikutnya</strong>. Jika peserta sudah tercatat hadir, waktunya tetap memakai check-in pertama.</p>
         </div>
       </section>
 
       <section id="ringkasan" className={styles.section}>
         <div className={styles.sectionNumber}>05</div>
         <div><h2>Lihat ringkasan</h2>
-          <p><Link href="/">Beranda</Link> menampilkan total peserta, yang sudah hadir, yang belum hadir, dan WhatsApp yang sudah dikonfirmasi. Bagian Langkah berikutnya menunjukkan tugas yang masih perlu ditangani. Admin juga bisa mengunduh CSV dari halaman Peserta serta mengatur acara dan pesan WhatsApp.</p>
+          <p><Link href="/">Beranda</Link> menampilkan total peserta, yang sudah hadir, yang belum hadir, dan WhatsApp yang sudah dikonfirmasi. Bagian Langkah berikutnya menunjukkan tugas yang masih perlu ditangani. Admin juga bisa mengunduh CSV dari halaman Peserta.</p>
+        </div>
+      </section>
+
+      <section id="pengaturan" className={styles.section}>
+        <div className={styles.sectionNumber}>06</div>
+        <div><h2>Ubah pengaturan acara</h2>
+          <p>Panitia dan Admin bisa membuka <Link href="/settings">Pengaturan</Link> untuk mengubah nama acara, tanggal, prefix registrasi, dan template pesan WhatsApp. Periksa isinya, lalu pilih <strong>Simpan pengaturan</strong>.</p>
+          <ul>
+            <li><strong>Prefix registrasi</strong> adalah awal nomor peserta, misalnya PKLU- atau REG-. Setelah prefix diganti, peserta baru memakai prefix terbaru. Nomor peserta yang sudah dibuat tetap sama.</li>
+            <li><strong>Template WhatsApp</strong> dipakai saat membuka pesan berikutnya. Tulis <strong>{"{{nama}}"}</strong> untuk nama peserta dan <strong>{"{{nomor}}"}</strong> untuk nomor registrasi. Token <strong>{"{{jemaat}}"}</strong> dan <strong>{"{{tanggal}}"}</strong> juga tersedia. Periksa Pratinjau pesan sebelum menyimpan.</li>
+            <li>Jumlah peserta di Beranda dihitung dari data yang sudah tersimpan. Tidak ada target peserta yang perlu diisi.</li>
+          </ul>
         </div>
       </section>
 

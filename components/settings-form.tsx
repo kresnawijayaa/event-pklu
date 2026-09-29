@@ -27,8 +27,8 @@ function formatAuditDate(value: Date | string) {
 export default function SettingsForm({ initial }: { initial: SettingsData }) {
   const [name, setName] = useState(initial.event.name);
   const [eventDate, setEventDate] = useState(initial.event.eventDate);
-  const [target, setTarget] = useState(String(initial.event.targetParticipants));
   const [prefix, setPrefix] = useState(initial.event.registrationPrefix);
+  const [savedPrefix, setSavedPrefix] = useState(initial.event.registrationPrefix);
   const [template, setTemplate] = useState(initial.event.whatsappTemplate);
   const [audit, setAudit] = useState(initial.audit);
   const [busy, setBusy] = useState(false);
@@ -40,11 +40,14 @@ export default function SettingsForm({ initial }: { initial: SettingsData }) {
     try {
       const response = await fetch("/api/settings", {
         method: "PATCH", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, eventDate, targetParticipants: Number(target), registrationPrefix: prefix, whatsappTemplate: template }),
+        body: JSON.stringify({ name, eventDate, registrationPrefix: prefix, whatsappTemplate: template }),
       });
       const result = await response.json() as { ok: boolean; data?: SettingsData["event"]; error?: { message?: string } };
       if (!response.ok || !result.ok || !result.data) throw new Error(result.error?.message ?? "Pengaturan belum berhasil disimpan.");
-      setMessage("Perubahan tersimpan. Pesan WhatsApp berikutnya memakai template terbaru.");
+      setMessage(prefix !== savedPrefix
+        ? "Pengaturan tersimpan. Prefix baru berlaku untuk peserta berikutnya; nomor lama tetap. Pesan WhatsApp berikutnya memakai template terbaru."
+        : "Pengaturan tersimpan. Pesan WhatsApp berikutnya memakai template terbaru.");
+      setSavedPrefix(result.data.registrationPrefix);
       const refreshed = await fetch("/api/settings", { cache: "no-store" });
       if (refreshed.ok) {
         const latest = await refreshed.json() as { data?: SettingsData };
@@ -68,8 +71,7 @@ export default function SettingsForm({ initial }: { initial: SettingsData }) {
         <div className={styles.fields}>
           <label>Nama acara<input required minLength={2} maxLength={160} value={name} onChange={(e) => setName(e.target.value)} /></label>
           <label>Tanggal<input required type="date" value={eventDate} onChange={(e) => setEventDate(e.target.value)} /></label>
-          <label>Target peserta<input required type="number" min={1} max={100000} value={target} onChange={(e) => setTarget(e.target.value)} /></label>
-          <label>Prefix registrasi<input required minLength={2} maxLength={20} pattern="[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)*-" value={prefix} onChange={(e) => setPrefix(e.target.value.toUpperCase())} disabled={initial.prefixLocked} aria-describedby="prefix-help" /><span id="prefix-help">Contoh PKLU-. Prefix terkunci setelah peserta pertama dibuat.</span></label>
+          <label>Prefix registrasi<input required minLength={2} maxLength={20} pattern="[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)*-" value={prefix} onChange={(e) => setPrefix(e.target.value.toUpperCase())} aria-describedby="prefix-help" /><span id="prefix-help">Contoh: PKLU- atau REG-. Prefix baru dipakai untuk nomor registrasi yang dibuat setelah perubahan disimpan. Nomor lama tetap.</span></label>
         </div>
       </section>
       <section className={styles.section} aria-labelledby="template-title">

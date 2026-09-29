@@ -14,7 +14,6 @@ const settingsSchema = z.object({
     const date = new Date(`${value}T00:00:00Z`);
     return !Number.isNaN(date.getTime()) && date.toISOString().slice(0, 10) === value;
   }, "Tanggal acara tidak valid."),
-  targetParticipants: z.number().int().min(1).max(100_000),
   registrationPrefix: z.string().regex(/^[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)*-$/).max(20),
   whatsappTemplate: z.string().trim().min(1).max(5_000).refine((template) => {
     const tokens = [...template.matchAll(/\{\{([^{}]+)\}\}/g)].map((match) => match[1]);
@@ -24,7 +23,7 @@ const settingsSchema = z.object({
 
 export async function GET() {
   try {
-    await requireRole(["ADMIN"]);
+    await requireRole(["STAFF", "ADMIN"]);
     return success(await getEventSettings());
   } catch (error) { return failure(error); }
 }
@@ -32,7 +31,7 @@ export async function GET() {
 export async function PATCH(request: Request) {
   try {
     if (!hasSameOrigin(request)) throw new AppError("INVALID_ORIGIN", 403, "Permintaan tidak berasal dari aplikasi ini.");
-    const session = await requireRole(["ADMIN"]);
+    const session = await requireRole(["STAFF", "ADMIN"]);
     const input = settingsSchema.parse(await request.json().catch(() => null));
     return success(await updateEventSettings(input, session));
   } catch (error) { return failure(error); }

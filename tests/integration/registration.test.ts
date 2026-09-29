@@ -129,16 +129,36 @@ describe("participant registration transaction", () => {
     expect(directConfirm.whatsappConfirmedAt).toBeInstanceOf(Date);
   });
 
-  it("locks the registration prefix after participants exist", async () => {
+  it("uses a changed registration prefix for new participants", async () => {
     const settings = await getEventSettings();
-    await expect(updateEventSettings({
-      name: settings.event.name,
-      eventDate: settings.event.eventDate,
-      targetParticipants: settings.event.targetParticipants,
-      registrationPrefix: `${settings.event.registrationPrefix}NEW-`,
-      whatsappTemplate: settings.event.whatsappTemplate,
-    }, { sessionId, role: "ADMIN", expiresAt: new Date(Date.now() + 60_000) })).rejects.toMatchObject({
-      code: "PREFIX_LOCKED", status: 409,
-    });
+    const session = { sessionId, role: "STAFF" as const, expiresAt: new Date(Date.now() + 60_000) };
+    const changedPrefix = settings.event.registrationPrefix === "TEST-" ? "NEW-" : "TEST-";
+    const originalCode = (await db.select({ registrationCode: participants.registrationCode })
+      .from(participants).where(eq(participants.id, createdIds[0])).limit(1))[0].registrationCode;
+    try {
+      await updateEventSettings({
+        name: settings.event.name,
+        eventDate: settings.event.eventDate,
+        registrationPrefix: changedPrefix,
+        whatsappTemplate: settings.event.whatsappTemplate,
+      }, session);
+      const suffix = randomUUID().replace(/\D/g, "").slice(0, 8).padEnd(8, "7");
+      const created = await createParticipant({
+        requestId: randomUUID(), name: `New Prefix ${suffix}`,
+        whatsapp: `62819${suffix}9`, confirmDuplicate: false,
+      }, session);
+      createdIds.push(created.participant!.id);
+      expect(created.participant!.registrationCode.startsWith(changedPrefix)).toBe(true);
+      const [existing] = await db.select({ registrationCode: participants.registrationCode })
+        .from(participants).where(eq(participants.id, createdIds[0])).limit(1);
+      expect(existing.registrationCode).toBe(originalCode);
+    } finally {
+      await updateEventSettings({
+        name: settings.event.name,
+        eventDate: settings.event.eventDate,
+        registrationPrefix: settings.event.registrationPrefix,
+        whatsappTemplate: settings.event.whatsappTemplate,
+      }, session);
+    }
   });
 });

@@ -91,7 +91,7 @@ export default function ParticipantList({ role, deleted = false }: { role: Acces
 
   return <section className={styles.section} aria-label="Daftar peserta">
     <form className={styles.search} onSubmit={submit} role="search">
-      <label htmlFor="participant-search">Cari peserta <span className={styles.searchHint}>Nama, kode PKLU, atau nomor WhatsApp</span></label>
+      <label htmlFor="participant-search">Cari peserta <span className={styles.searchHint}>Nama, nomor registrasi, atau nomor WhatsApp</span></label>
       <div><input id="participant-search" value={query} onChange={(event) => setQuery(event.target.value)} /><button type="submit">Cari</button></div>
     </form>
     <button className={styles.filterToggle} type="button" aria-expanded={filtersOpen} aria-controls="participant-filters" onClick={() => setFiltersOpen((open) => !open)}>
@@ -113,7 +113,7 @@ export default function ParticipantList({ role, deleted = false }: { role: Acces
     {error && <p className={styles.error} role="alert">{error}</p>}
     {busy && <p className={styles.status} role="status">Memuat daftar…</p>}
     {!busy && !error && items.length === 0 && (hasActiveSearch
-      ? <div className={styles.empty}>Tidak ada peserta yang cocok. Coba nama, kode PKLU, atau nomor WhatsApp lain. <button type="button" onClick={() => { setQuery(""); setSearch(""); setAttendance("all"); setWhatsapp("all"); setPageCursors([null]); setPageIndex(0); setBusy(true); }}>Hapus pencarian dan filter</button></div>
+      ? <div className={styles.empty}>Tidak ada peserta yang cocok. Coba nama, nomor registrasi, atau nomor WhatsApp lain. <button type="button" onClick={() => { setQuery(""); setSearch(""); setAttendance("all"); setWhatsapp("all"); setPageCursors([null]); setPageIndex(0); setBusy(true); }}>Hapus pencarian dan filter</button></div>
       : deleted ? <p className={styles.empty}>Belum ada peserta terhapus.</p>
         : <p className={styles.empty}>Belum ada peserta. <Link href="/register">Tambah peserta</Link> atau <Link href="/import">impor file Excel</Link>.</p>)}
     {items.length > 0 && <div className={styles.list} ref={listRef}>

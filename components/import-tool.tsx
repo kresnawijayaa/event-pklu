@@ -181,7 +181,7 @@ export default function ImportTool() {
       <label htmlFor="import-file">Pilih file Excel atau CSV</label>
       <input id="import-file" type="file" accept=".xlsx,.xls,.csv" onChange={onFileChange} disabled={busy || committing} />
       <button className={styles.template} type="button" onClick={downloadTemplate}>Unduh template Excel</button>
-      <p>Sheet pertama dibaca. Nama dan WhatsApp wajib. Nomor PKLU dibuat otomatis. Maksimal 1.000 baris dan 15 MB. Kolom lain boleh dikosongkan.</p>
+      <p>Sheet pertama dibaca. Nama dan WhatsApp wajib. Nomor registrasi dibuat otomatis. Maksimal 1.000 baris dan 15 MB. Kolom lain boleh dikosongkan.</p>
     </div>
     {busy && <p className={styles.status} role="status">Membaca dan memvalidasi file…</p>}
     {error && <p className={styles.error} role="alert">{error}</p>}
