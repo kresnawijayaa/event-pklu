@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState, type ChangeEvent } from "react";
+import { useRef, useState, type ChangeEvent } from "react";
 import * as XLSX from "xlsx";
 import styles from "./import-tool.module.css";
 
@@ -36,6 +36,10 @@ function findColumn(headers: unknown[], choices: Set<string>) {
 }
 
 export default function ImportTool() {
+  const workbookRef = useRef<XLSX.WorkBook | null>(null);
+  const [fileName, setFileName] = useState("");
+  const [sheetNames, setSheetNames] = useState<string[]>([]);
+  const [selectedSheet, setSelectedSheet] = useState("");
   const [rows, setRows] = useState<Row[]>([]);
   const [busy, setBusy] = useState(false);
   const [committing, setCommitting] = useState(false);
@@ -55,17 +59,14 @@ export default function ImportTool() {
     XLSX.writeFile(workbook, "template-peserta-pklu.xlsx");
   }
 
-  async function onFileChange(event: ChangeEvent<HTMLInputElement>) {
-    const file = event.target.files?.[0];
-    if (!file) return;
+  function resetReview() {
     setError(""); setNotice(""); setRows([]); setValidated(false); setCommitted(false); setProgress(null); setSummary({ imported: 0, skipped: 0, failed: 0 }); setPreviewFilter("all");
-    if (file.size > 15 * 1024 * 1024) { setError("Ukuran file maksimal 15 MB."); event.target.value = ""; return; }
-    setBusy(true);
-    try {
-      const workbook = XLSX.read(await file.arrayBuffer(), { type: "array" });
-      const firstName = workbook.SheetNames[0];
-      if (!firstName) throw new Error("Sheet pertama tidak ditemukan.");
-      const matrix = XLSX.utils.sheet_to_json<unknown[]>(workbook.Sheets[firstName], { header: 1, raw: false, defval: "" });
+  }
+
+  async function validateSheet(workbook: XLSX.WorkBook, sheetName: string, isCsv: boolean) {
+      const sheet = workbook.Sheets[sheetName];
+      if (!sheet) throw new Error("Sheet yang dipilih tidak ditemukan dalam file.");
+      const matrix = XLSX.utils.sheet_to_json<unknown[]>(sheet, { header: 1, raw: false, defval: "" });
       if (matrix.length < 2) throw new Error("File harus memiliki baris header dan setidaknya satu peserta.");
       const headers = matrix[0];
       const nameColumn = findColumn(headers, aliases.name);
@@ -121,9 +122,46 @@ export default function ImportTool() {
       }));
       setValidated(true);
       setPreviewFilter(result.data.rows.some((row) => row.status !== "VALID") ? "issues" : "all");
-      setNotice(`${rawRows.length.toLocaleString("id-ID")} baris diperiksa. Baris bertanda Periksa perlu dipilih satu per satu.`);
+      setNotice(`${rawRows.length.toLocaleString("id-ID")} baris diperiksa dari ${isCsv ? "file CSV" : `sheet "${sheetName}"`}. Baris bertanda Periksa perlu dipilih satu per satu.`);
+  }
+
+  async function onFileChange(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    resetReview(); workbookRef.current = null; setFileName(""); setSheetNames([]); setSelectedSheet("");
+    if (file.size > 15 * 1024 * 1024) { setError("Ukuran file maksimal 15 MB."); event.target.value = ""; return; }
+    setBusy(true);
+    try {
+      const workbook = XLSX.read(await file.arrayBuffer(), { type: "array" });
+      if (!workbook.SheetNames.length) throw new Error("Tidak ada sheet dalam file.");
+      const isCsv = /\.csv$/i.test(file.name);
+      workbookRef.current = workbook;
+      setFileName(file.name);
+      if (isCsv) {
+        await validateSheet(workbook, workbook.SheetNames[0], true);
+      } else {
+        setSheetNames(workbook.SheetNames);
+        if (workbook.SheetNames.length === 1) {
+          setSelectedSheet(workbook.SheetNames[0]);
+          await validateSheet(workbook, workbook.SheetNames[0], false);
+        } else {
+          setNotice("Pilih sheet yang berisi data peserta untuk diperiksa.");
+        }
+      }
     } catch (cause) { setError(cause instanceof Error ? cause.message : "File tidak dapat dibaca."); }
     finally { setBusy(false); event.target.value = ""; }
+  }
+
+  async function onSheetChange(event: ChangeEvent<HTMLSelectElement>) {
+    const sheetName = event.target.value;
+    setSelectedSheet(sheetName); resetReview();
+    if (!sheetName) return;
+    const workbook = workbookRef.current;
+    if (!workbook) { setError("Pilih ulang file Excel."); return; }
+    setBusy(true);
+    try { await validateSheet(workbook, sheetName, false); }
+    catch (cause) { setError(cause instanceof Error ? cause.message : "Sheet tidak dapat dibaca."); }
+    finally { setBusy(false); }
   }
 
   function toggleRow(requestId: string) {
@@ -180,8 +218,16 @@ export default function ImportTool() {
     <div className={styles.picker}>
       <label htmlFor="import-file">Pilih file Excel atau CSV</label>
       <input id="import-file" type="file" accept=".xlsx,.xls,.csv" onChange={onFileChange} disabled={busy || committing} />
+      {fileName && <p className={styles.fileName}>File: {fileName}</p>}
+      {sheetNames.length > 0 && <div className={styles.sheetPicker}>
+        <label htmlFor="import-sheet">Sheet peserta</label>
+        <select id="import-sheet" value={selectedSheet} onChange={onSheetChange} disabled={busy || committing}>
+          {sheetNames.length > 1 && <option value="">Pilih sheet</option>}
+          {sheetNames.map((sheetName) => <option key={sheetName} value={sheetName}>{sheetName}</option>)}
+        </select>
+      </div>}
       <button className={styles.template} type="button" onClick={downloadTemplate}>Unduh template Excel</button>
-      <p>Sheet pertama dibaca. Nama dan WhatsApp wajib. Nomor registrasi dibuat otomatis. Maksimal 1.000 baris dan 15 MB. Kolom lain boleh dikosongkan.</p>
+      <p>Pilih sheet yang berisi data peserta. Nama dan WhatsApp wajib. Nomor registrasi dibuat otomatis. Maksimal 1.000 baris dan 15 MB. Kolom lain boleh dikosongkan.</p>
     </div>
     {busy && <p className={styles.status} role="status">Membaca dan memvalidasi file…</p>}
     {error && <p className={styles.error} role="alert">{error}</p>}

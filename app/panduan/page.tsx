@@ -33,7 +33,7 @@ export default function GuidePage() {
           <p>Ada dua cara. Gunakan <Link href="/register">Tambah peserta</Link> untuk satu orang. Isi nama dan WhatsApp; buka Data tambahan hanya bila perlu. Gunakan <Link href="/import">Impor</Link> untuk file Excel atau CSV berisi banyak peserta. Panitia dan Admin bisa memakai keduanya.</p>
           <ul>
             <li>Nama dan nomor WhatsApp wajib diisi. Lengkapi nomor yang masih kosong sebelum impor. Kolom Asal Jemaat, Mode, Kategori, Asal Mupel, Tipe, dan Daftar boleh dikosongkan.</li>
-            <li>Unduh template Excel dari halaman Impor jika belum punya format file. Isi data pada sheet pertama, lalu ikuti tahap Pilih file, Periksa data, dan Lihat hasil.</li>
+            <li>Unduh template Excel dari halaman Impor jika belum punya format file. Setelah memilih file, pilih sheet yang berisi peserta. Lalu periksa data sebelum mengimpor. Untuk CSV, data langsung diperiksa.</li>
             <li>Baris bertanda Periksa perlu ditinjau sebelum dipilih. Baris Tidak bisa harus diperbaiki di Excel, lalu file diunggah kembali.</li>
             <li>Jika data serupa ditemukan, periksa nama dan nomor WhatsApp sebelum memilih baris itu.</li>
             <li>Jangan membuat nomor registrasi di Excel. Sistem membuatnya saat peserta tersimpan.</li>
