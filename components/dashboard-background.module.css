@@ -1,0 +1,22 @@
+.artwork { position: absolute; z-index: 0; inset: 0 0 auto; height: max(100svh, 780px); overflow: hidden; pointer-events: none; }
+.artwork svg { position: absolute; display: block; height: auto; }
+.ribbons { top: -95px; left: min(-110px, calc((100vw - 1180px) / 2 - 305px)); width: min(45vw, 600px); min-width: 440px; opacity: .88; }
+.polygons { top: -115px; right: min(-135px, calc((100vw - 1180px) / 2 - 310px)); width: min(46vw, 600px); min-width: 440px; opacity: .94; }
+.mesh { bottom: -122px; left: min(-145px, calc((100vw - 1180px) / 2 - 370px)); width: min(56vw, 760px); min-width: 540px; opacity: .9; }
+.arcs { right: min(-110px, calc((100vw - 1180px) / 2 - 345px)); bottom: -110px; width: min(51vw, 670px); min-width: 510px; opacity: .9; }
+.dots { position: absolute; right: 24%; bottom: 62px; width: 270px; height: 170px; background-image: radial-gradient(circle, rgba(164, 220, 180, .42) 1px, transparent 1.5px); background-size: 25px 25px; mask-image: radial-gradient(ellipse at center, black, transparent 73%); opacity: .34; }
+@media (max-width: 1050px) {
+  .ribbons { top: -125px; left: -215px; opacity: .58; }
+  .polygons { top: -150px; right: -230px; opacity: .62; }
+  .mesh { left: -275px; opacity: .6; }
+  .arcs { right: -260px; opacity: .62; }
+  .dots { right: 17%; opacity: .22; }
+}
+@media (max-width: 600px) {
+  .artwork { height: max(100svh, 680px); }
+  .ribbons { top: -160px; left: -310px; opacity: .44; }
+  .polygons { top: -185px; right: -325px; opacity: .42; }
+  .mesh { bottom: -145px; left: -370px; opacity: .42; }
+  .arcs { right: -340px; bottom: -140px; opacity: .4; }
+  .dots { display: none; }
+}

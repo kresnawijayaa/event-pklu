@@ -17,7 +17,7 @@
 .submit:hover:not(:disabled) { background: var(--forest-deep); }
 .submit:disabled { opacity: .65; cursor: not-allowed; }
 .submit span { color: #e6c875; font-size: 20px; }
-.form { padding: 20px; border: 1px solid var(--line); border-radius: 14px; background: white; box-shadow: var(--shadow-subtle); }
+.form { padding: 20px; border: 1px solid var(--line); border-radius: 14px; background: var(--panel); box-shadow: var(--shadow-subtle); }
 .field { gap: 6px; margin-bottom: 16px; }
 .field label { color: var(--ink-muted); font-size: 14px; font-weight: 600; }
 .field label span, .field > span { color: var(--ink-muted); font-size: 12px; }
@@ -29,3 +29,15 @@
 .submit { min-height: 46px; justify-content: center; border-radius: 7px; font-size: 14px; font-weight: 600; }
 .submit span { display: none; }
 @media (max-width: 560px) { .form { padding: 16px; } }
+.optional { margin: 2px 0 14px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.optional summary { min-height: 48px; display: flex; align-items: center; justify-content: space-between; gap: 12px; color: var(--forest); font-size: 14px; font-weight: 600; cursor: pointer; list-style: none; }
+.optional summary::-webkit-details-marker { display: none; }
+.optional summary::after { content: ""; width: 8px; height: 8px; margin-right: 4px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: rotate(45deg); }
+.optional[open] summary::after { transform: rotate(225deg); }
+.optional[open] .field { margin-top: 8px; }
+.success { margin-top: 14px; padding: 15px; border: 1px solid #9dc9ab; border-radius: 8px; background: #e7f4eb; color: var(--ink); }
+.success strong { display: block; font-size: 16px; }
+.success p { margin: 3px 0 12px; font-size: 14px; }
+.success div { display: flex; flex-wrap: wrap; gap: 9px; }
+.success a, .success button { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; padding: 0 12px; border: 1px solid var(--forest); border-radius: 7px; background: var(--forest); color: white; font-size: 14px; font-weight: 600; text-decoration: none; cursor: pointer; }
+.success button { background: transparent; color: var(--forest); }

@@ -5,7 +5,7 @@ import { events, participants } from "@/db/schema";
 export async function getDashboardSummary() {
   const eventSlug = process.env.ACTIVE_EVENT_SLUG ?? "pklu-gpib-2026";
   const [event] = await db
-    .select({ id: events.id, name: events.name, eventDate: events.eventDate, target: events.targetParticipants })
+    .select({ id: events.id, name: events.name, eventDate: events.eventDate })
     .from(events)
     .where(eq(events.slug, eventSlug))
     .limit(1);
@@ -25,7 +25,7 @@ export async function getDashboardSummary() {
   const checkedIn = totals?.checkedIn ?? 0;
 
   return {
-    event: { name: event.name, eventDate: event.eventDate, target: event.target },
+    event: { name: event.name, eventDate: event.eventDate },
     registered,
     checkedIn,
     notCheckedIn: registered - checkedIn,

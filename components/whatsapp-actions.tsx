@@ -41,6 +41,7 @@ export default function WhatsAppActions({ participant, template, eventDate, onSt
   }
 
   async function confirmSent() {
+    if (!window.confirm(`Apakah pesan untuk ${participant.name} sudah Anda kirim di WhatsApp?`)) return;
     setBusy(true); setMessage("");
     try {
       const response = await fetch(`/api/participants/${participant.id}/whatsapp-confirmed`, { method: "POST" });
@@ -54,6 +55,7 @@ export default function WhatsAppActions({ participant, template, eventDate, onSt
   }
 
   return <div className={styles.actions}>
+    {!confirmedAt && <p className={styles.guide}>Buka WhatsApp, tekan Kirim, lalu kembali untuk konfirmasi di sini.</p>}
     <a className={styles.open} href={href} target="_blank" rel="noopener noreferrer" onClick={markOpened}>Buka WhatsApp <span aria-hidden="true">↗</span></a>
     {confirmedAt ? <span className={styles.confirmed} role="status">Terkonfirmasi</span> : <button className={styles.confirm} type="button" onClick={confirmSent} disabled={busy}>{busy ? "Menyimpan…" : "Konfirmasi terkirim"}</button>}
     {message && <span className={styles.message} role="status">{message}</span>}

@@ -3,8 +3,9 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ClipboardCheck, FileUp, House, Settings2, UserRoundPlus, UsersRound } from "lucide-react";
+import { CircleHelp, ClipboardCheck, FileUp, House, Settings2, UserRoundPlus, UsersRound } from "lucide-react";
 import type { AccessRole } from "@/lib/auth/types";
+import DashboardBackground from "./dashboard-background";
 import styles from "./dashboard-shell.module.css";
 
 export default function DashboardShell({ role, children }: { role: AccessRole; children: React.ReactNode }) {
@@ -23,21 +24,23 @@ export default function DashboardShell({ role, children }: { role: AccessRole; c
 
   return (
     <div className={styles.frame}>
+      <DashboardBackground />
       <header className={styles.topbar}>
         <div className={styles.identity}>
-          <Link className={styles.brand} href="/" aria-label="PKLU, ke ringkasan">PKLU<span>2026</span></Link>
-          <a className={styles.churchLink} href="https://gpibharapanindah.org" target="_blank" rel="noopener noreferrer">GPIB Harapan Indah</a>
+          <Link className={styles.brand} href="/" aria-label="PKLU, ke beranda">PKLU<span>2026</span></Link>
+          <a className={styles.churchLink} href="https://gpib.or.id" target="_blank" rel="noopener noreferrer">GPIB</a>
         </div>
         <nav className={styles.desktopNav} aria-label="Menu utama">
-          <Link href="/" aria-current={pathname === "/" ? "page" : undefined}>Ringkasan</Link>
+          <Link href="/" aria-current={pathname === "/" ? "page" : undefined}>Beranda</Link>
           <Link href="/participants" aria-current={pathname === "/participants" ? "page" : undefined}>Peserta</Link>
-          <Link href="/register" aria-current={pathname === "/register" ? "page" : undefined}>Registrasi</Link>
+          <Link href="/register" aria-current={pathname === "/register" ? "page" : undefined}>Tambah peserta</Link>
           <Link href="/check-in" aria-current={pathname === "/check-in" ? "page" : undefined}>Check-in</Link>
           <Link href="/import" aria-current={pathname === "/import" ? "page" : undefined}>Impor</Link>
           {role === "ADMIN" && <Link href="/settings" aria-current={pathname === "/settings" ? "page" : undefined}>Pengaturan</Link>}
         </nav>
         <div className={styles.account}>
           <span className={styles.role}>{role === "ADMIN" ? "Admin" : "Panitia"}</span>
+          <Link className={styles.helpLink} href="/panduan" aria-label="Buka panduan penggunaan" aria-current={pathname === "/panduan" ? "page" : undefined}><CircleHelp aria-hidden="true" /><span>Panduan</span></Link>
           <button type="button" onClick={logout} disabled={busy}>{busy ? "Keluar…" : "Keluar"}</button>
         </div>
       </header>
@@ -50,7 +53,7 @@ export default function DashboardShell({ role, children }: { role: AccessRole; c
         <Link href="/import" aria-current={pathname === "/import" ? "page" : undefined}><FileUp aria-hidden="true" />Impor</Link>
         {role === "ADMIN" && <Link href="/settings" aria-label="Pengaturan" aria-current={pathname === "/settings" ? "page" : undefined}><Settings2 aria-hidden="true" />Atur</Link>}
       </nav>
-      <footer className={styles.footer}>PKLU 2026 <span>·</span> <a href="https://gpibharapanindah.org" target="_blank" rel="noopener noreferrer">GPIB Harapan Indah</a></footer>
+      <footer className={styles.footer}>PKLU 2026 <span>·</span> <a href="https://gpib.or.id" target="_blank" rel="noopener noreferrer">GPIB</a></footer>
     </div>
   );
 }

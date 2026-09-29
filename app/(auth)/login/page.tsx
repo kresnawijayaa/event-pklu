@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import LoginForm from "@/components/login-form";
 import { redirect } from "next/navigation";
 import { requireSession } from "@/lib/auth/session";
@@ -22,13 +23,13 @@ export default async function LoginPage() {
       <section className={styles.panel} aria-labelledby="access-title">
         <header className={styles.brand}>
           <strong>PKLU <span>2026</span></strong>
-          <a href="https://gpibharapanindah.org" target="_blank" rel="noopener noreferrer">GPIB Harapan Indah</a>
+          <a href="https://gpib.or.id" target="_blank" rel="noopener noreferrer">GPIB</a>
         </header>
         <div className={styles.content}>
           <h1 id="access-title">Masuk panitia</h1>
           <p className={styles.instruction}>Masukkan PIN untuk melanjutkan.</p>
           <LoginForm />
-          <p className={styles.help}>Perlu bantuan? Hubungi koordinator panitia.</p>
+          <p className={styles.help}><Link href="/panduan">Baca panduan penggunaan</Link><span> · </span>Perlu bantuan akses? Hubungi koordinator panitia.</p>
         </div>
       </section>
     </main>

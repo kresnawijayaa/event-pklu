@@ -1,6 +1,6 @@
 ﻿.content { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(240px, .8fr); align-items: start; gap: 20px; }
 .form { min-width: 0; }
-.section { margin-bottom: 16px; padding: 16px; border: 1px solid var(--line); background: var(--paper-light); }
+.section { margin-bottom: 16px; padding: 16px; border: 1px solid var(--line); background: var(--panel); }
 .section h2 { margin: 0 0 12px; color: var(--forest-deep); font: 700 24px var(--display-font); }
 .fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 .fields label, .templateLabel { display: flex; flex-direction: column; gap: 8px; color: var(--forest-deep); font-size: 16px; font-weight: 700; }
@@ -41,10 +41,10 @@
 .fields input, .section textarea { min-height: 44px; border-color: #cbd5e1; border-radius: 7px; font-size: 15px; }
 .help { color: var(--ink-muted); font-size: 13px; }
 .help code { color: var(--ink); }
-.preview { border-left: 0; border-radius: 8px; background: #f8fafc; }
+.preview { border-left: 0; border-radius: 8px; background: var(--surface-muted); }
 .preview h3 { color: var(--ink); font-size: 14px; }
 .preview pre { font-size: 13px; }
 .submit { min-height: 44px; border-radius: 7px; font-size: 14px; font-weight: 600; }
-.audit { position: static; padding: 18px; border: 1px solid var(--line); border-radius: 12px; background: white; box-shadow: var(--shadow-subtle); }
+.audit { position: static; padding: 18px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); box-shadow: var(--shadow-subtle); }
 .audit li span, .audit li time, .audit li small, .empty { font-size: 12px; }
 @media (max-width: 560px) { .section, .audit { padding: 14px; } }

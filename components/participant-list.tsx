@@ -33,6 +33,7 @@ export default function ParticipantList({ role, deleted = false }: { role: Acces
   const [event, setEvent] = useState<{ whatsappTemplate: string; eventDate: string } | null>(null);
   const requestSequence = useRef(0);
   const listRef = useRef<HTMLDivElement>(null);
+  const hasActiveSearch = Boolean(search) || attendance !== "all" || whatsapp !== "all";
 
   const load = useCallback(async (q: string, pageCursor: string | null, attendanceFilter: string, whatsappFilter: string) => {
     const requestId = ++requestSequence.current;
@@ -90,7 +91,7 @@ export default function ParticipantList({ role, deleted = false }: { role: Acces
 
   return <section className={styles.section} aria-label="Daftar peserta">
     <form className={styles.search} onSubmit={submit} role="search">
-      <label htmlFor="participant-search">Cari peserta</label>
+      <label htmlFor="participant-search">Cari peserta <span className={styles.searchHint}>Nama, kode PKLU, atau nomor WhatsApp</span></label>
       <div><input id="participant-search" value={query} onChange={(event) => setQuery(event.target.value)} /><button type="submit">Cari</button></div>
     </form>
     <button className={styles.filterToggle} type="button" aria-expanded={filtersOpen} aria-controls="participant-filters" onClick={() => setFiltersOpen((open) => !open)}>
@@ -111,7 +112,10 @@ export default function ParticipantList({ role, deleted = false }: { role: Acces
     </div>
     {error && <p className={styles.error} role="alert">{error}</p>}
     {busy && <p className={styles.status} role="status">Memuat daftar…</p>}
-    {!busy && !error && items.length === 0 && <p className={styles.empty}>Belum ada peserta yang cocok.</p>}
+    {!busy && !error && items.length === 0 && (hasActiveSearch
+      ? <div className={styles.empty}>Tidak ada peserta yang cocok. Coba nama, kode PKLU, atau nomor WhatsApp lain. <button type="button" onClick={() => { setQuery(""); setSearch(""); setAttendance("all"); setWhatsapp("all"); setPageCursors([null]); setPageIndex(0); setBusy(true); }}>Hapus pencarian dan filter</button></div>
+      : deleted ? <p className={styles.empty}>Belum ada peserta terhapus.</p>
+        : <p className={styles.empty}>Belum ada peserta. <Link href="/register">Tambah peserta</Link> atau <Link href="/import">impor file Excel</Link>.</p>)}
     {items.length > 0 && <div className={styles.list} ref={listRef}>
       {items.map((item) => {
         const expanded = expandedId === item.id;
@@ -160,6 +164,6 @@ export default function ParticipantList({ role, deleted = false }: { role: Acces
       <button type="button" disabled={busy || pageIndex === 0} onClick={() => { listRef.current?.scrollIntoView(); setBusy(true); setError(""); setExpandedId(null); setEditingId(null); setPageIndex((index) => index - 1); }}>Sebelumnya</button>
       <button type="button" disabled={busy || !nextCursor} onClick={() => { if (!nextCursor) return; listRef.current?.scrollIntoView(); setBusy(true); setError(""); setExpandedId(null); setEditingId(null); setPageCursors((current) => [...current.slice(0, pageIndex + 1), nextCursor]); setPageIndex((index) => index + 1); }}>Berikutnya</button>
     </div>}
-    <p className={styles.add}>{deleted ? <Link href="/participants">Kembali ke peserta aktif <span aria-hidden="true">→</span></Link> : <><Link href="/register">Daftarkan peserta <span aria-hidden="true">→</span></Link>{role === "ADMIN" && <Link href="/participants/deleted">Lihat data terhapus</Link>}</>}</p>
+    <p className={styles.add}>{deleted ? <Link href="/participants">Kembali ke peserta aktif <span aria-hidden="true">→</span></Link> : <><Link href="/register">Tambah peserta <span aria-hidden="true">→</span></Link>{role === "ADMIN" && <Link href="/participants/deleted">Lihat data terhapus</Link>}</>}</p>
   </section>;
 }

@@ -1,41 +1,48 @@
-.frame { min-height: 100svh; display: flex; flex-direction: column; background: var(--paper); }
-.topbar { width: min(100% - 48px, 1180px); min-height: 90px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 24px; border-bottom: 1px solid var(--line); }
+.frame { position: relative; isolation: isolate; min-height: 100svh; display: flex; flex-direction: column; background: var(--ambient-background); background-size: var(--ambient-size); background-repeat: no-repeat; }
+.topbar, .main, .footer { position: relative; z-index: 1; }
+.topbar { width: min(100% - 48px, 1180px); min-height: 90px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 24px; border-bottom: 1px solid var(--canvas-line); }
 .identity { min-width: 0; display: flex; flex-direction: column; gap: 2px; flex-shrink: 0; }
-.brand { display: flex; align-items: baseline; gap: 9px; color: var(--ink); font-size: 18px; font-weight: 700; letter-spacing: -.03em; text-decoration: none; }
-.brand span { color: var(--ink-muted); font-size: 12px; font-weight: 600; letter-spacing: .02em; }
-.churchLink { color: var(--ink-muted); font-size: 13px; text-decoration: none; }
-.churchLink:hover, .footer a:hover { color: var(--forest); text-decoration: underline; }
-.desktopNav { display: flex; align-items: center; gap: 3px; padding: 4px; border-radius: 9px; background: #f1f5f9; }
-.desktopNav a { min-height: 36px; display: flex; align-items: center; padding: 0 12px; border-radius: 6px; color: var(--ink-muted); font-size: 14px; font-weight: 500; text-decoration: none; white-space: nowrap; }
-.desktopNav a:hover { color: var(--ink); }
-.desktopNav a[aria-current="page"] { background: white; color: var(--ink); box-shadow: 0 1px 3px rgba(15,23,42,.1); font-weight: 600; }
+.brand { display: flex; align-items: baseline; gap: 9px; color: var(--canvas-text); font-size: 18px; font-weight: 700; letter-spacing: -.03em; text-decoration: none; }
+.brand span { color: var(--canvas-muted); font-size: 12px; font-weight: 600; letter-spacing: .02em; }
+.churchLink { color: var(--canvas-muted); font-size: 13px; text-decoration: none; }
+.churchLink:hover, .footer a:hover { color: var(--canvas-text); text-decoration: underline; }
+.desktopNav { display: flex; align-items: center; gap: 3px; padding: 4px; border-radius: 9px; background: var(--canvas-raised); }
+.desktopNav a { min-height: 36px; display: flex; align-items: center; padding: 0 12px; border-radius: 6px; color: var(--canvas-muted); font-size: 14px; font-weight: 500; text-decoration: none; white-space: nowrap; }
+.desktopNav a:hover { color: var(--canvas-text); background: #295b46; }
+.desktopNav a[aria-current="page"] { background: var(--panel); color: var(--forest-deep); box-shadow: 0 1px 3px rgba(0,0,0,.14); font-weight: 700; }
 .account { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
-.role { color: var(--ink-muted); font-size: 13px; }
+.role { color: var(--canvas-muted); font-size: 13px; }
+.helpLink { min-height: 36px; display: inline-flex; align-items: center; gap: 6px; padding: 0 8px; border-radius: 7px; color: var(--canvas-text); font-size: 13px; font-weight: 600; text-decoration: none; }
+.helpLink:hover, .helpLink[aria-current="page"] { background: var(--canvas-raised); }
+.helpLink svg { width: 17px; height: 17px; }
 .account button { min-height: 36px; padding: 0 13px; border: 1px solid var(--line); border-radius: 7px; background: white; color: var(--ink); font-size: 13px; font-weight: 600; cursor: pointer; }
 .account button:hover:not(:disabled) { border-color: #94a3b8; background: var(--surface-muted); }
 .account button:disabled { opacity: .6; }
 .main { width: min(100% - 48px, 1180px); margin: 0 auto; flex: 1; padding: 28px 0 52px; }
-.footer { padding: 16px 24px; border-top: 1px solid var(--line); color: var(--ink-muted); font-size: 12px; text-align: center; }
+.footer { padding: 16px 24px; border-top: 1px solid var(--canvas-line); color: var(--canvas-muted); font-size: 12px; text-align: center; }
 .footer span { padding: 0 5px; }
 .mobileNav { display: none; }
 @media (max-width: 1050px) {
   .desktopNav { display: none; }
   .main { padding-bottom: 94px; }
-  .mobileNav { position: fixed; z-index: 5; right: 0; bottom: 0; left: 0; min-height: calc(64px + env(safe-area-inset-bottom)); display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); padding: 6px 8px calc(6px + env(safe-area-inset-bottom)); border-top: 1px solid var(--line); background: white; box-shadow: 0 -4px 18px rgba(15,23,42,.035); }
+  .mobileNav { position: fixed; z-index: 5; right: 0; bottom: 0; left: 0; min-height: calc(64px + env(safe-area-inset-bottom)); display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); padding: 6px 8px calc(6px + env(safe-area-inset-bottom)); border-top: 1px solid var(--canvas-line); background: var(--canvas-raised); box-shadow: 0 -4px 18px rgba(0,0,0,.12); }
   .mobileNav.adminMobileNav { grid-template-columns: repeat(6, minmax(0, 1fr)); }
-  .mobileNav a { min-width: 0; min-height: 48px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; border-radius: 7px; color: var(--ink-muted); font-size: 12px; font-weight: 500; text-decoration: none; }
+  .mobileNav a { min-width: 0; min-height: 48px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; border-radius: 7px; color: var(--canvas-muted); font-size: 12px; font-weight: 500; text-decoration: none; }
   .mobileNav a svg { width: 20px; height: 20px; stroke-width: 1.9; }
-  .mobileNav a[aria-current="page"] { color: var(--ink); background: #f1f5f9; font-weight: 700; }
+  .mobileNav a[aria-current="page"] { color: var(--forest-deep); background: var(--panel); font-weight: 700; }
 }
 @media (max-width: 600px) {
-  .topbar { width: calc(100% - 32px); min-height: 66px; gap: 10px; }
+  .topbar { width: calc(100% - 32px); min-height: 68px; gap: 10px; }
   .brand { font-size: 17px; }
   .churchLink { font-size: 12px; }
   .account { gap: 8px; }
   .role { font-size: 12px; }
-  .account button { min-height: 38px; padding: 0 10px; }
+  .helpLink { width: 44px; min-width: 44px; min-height: 44px; padding: 0; justify-content: center; border: 1px solid var(--canvas-line); background: var(--canvas-raised); }
+  .helpLink span { display: none; }
+  .account button { min-height: 44px; padding: 0 10px; }
   .main { width: calc(100% - 32px); padding-top: 20px; }
   .footer { display: none; }
   .mobileNav.adminMobileNav a { font-size: 11px; }
   .mobileNav.adminMobileNav a svg { width: 19px; height: 19px; }
 }
+@media (max-width: 390px) { .role { display: none; } }

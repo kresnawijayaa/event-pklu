@@ -15,9 +15,12 @@
   .content { padding: 20px 16px; }
   .content h1 { font-size: 28px; }
 }
-.shell { background: var(--paper); }
-.panel { border-radius: 14px; box-shadow: var(--shadow-subtle); }
+.shell { position: relative; isolation: isolate; background: var(--ambient-background); background-size: var(--ambient-size); background-repeat: no-repeat; }
+.shell::before { content: ""; position: fixed; z-index: 0; inset: 0; pointer-events: none; background: var(--ambient-shapes); filter: blur(36px); }
+.panel { position: relative; z-index: 1; }
+.panel { border-radius: 14px; background: var(--panel); box-shadow: 0 18px 50px rgba(0, 20, 12, .18); }
 .brand { border-bottom-color: var(--line); }
 .brand strong { color: var(--ink); }
 .content h1 { color: var(--ink); font-size: 28px; font-weight: 600; }
 .instruction, .help { color: var(--ink-muted); font-size: 14px; }
+.help a { color: var(--forest); font-weight: 600; text-underline-offset: 3px; }

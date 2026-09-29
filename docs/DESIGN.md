@@ -10,11 +10,13 @@ PKLU GPIB committee staff and admins use phones, tablets, and desktops to regist
 
 ### Brand Personality
 
-Calm, orderly, practical. Indonesian labels and direct instructions. GPIB Harapan Indah remains identified and linked in the interface.
+Calm, orderly, practical. Indonesian labels and direct instructions. GPIB links to `gpib.or.id`.
 
 ### Aesthetic Direction
 
-Minimal event-management interface based on the supplied HTML: near-white page, white content surfaces, slate text, thin neutral borders, restrained shadows, compact segmented navigation, and sturdy sans-serif typography. Data and actions appear near the top. No landing-page hero treatment.
+Minimal event-management interface based on the supplied HTML: deep green page canvas and navigation, soft pale-green work surfaces, white inputs, dark green text and primary actions, restrained borders and shadows, and sturdy sans-serif typography. Headings and supporting text on the canvas use high-contrast cream and sage. Data and actions appear near the top. No landing-page hero treatment.
+
+The dashboard background uses clipped geometric artwork at the viewport edges. Ribbons, rounded polygons, flowing lines, and arcs give the unused outer and lower space an identity while keeping the center behind data quiet.
 
 ### Design Principles
 
@@ -23,3 +25,4 @@ Minimal event-management interface based on the supplied HTML: near-white page, 
 - Use a compact desktop layout and a phone layout with large touch targets and bottom navigation.
 - Keep headings short and place labels next to the data or control they describe.
 - Use color primarily for state, focus, and primary actions.
+- Explain the working order plainly: add or import participants, send prepared WhatsApp messages, then record attendance.
