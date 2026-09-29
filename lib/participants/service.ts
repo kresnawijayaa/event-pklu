@@ -46,7 +46,6 @@ export function normalizeParticipantInput(input: { name: string; whatsapp: strin
 export async function listParticipants(options: {
   q: string;
   attendance: string;
-  whatsapp: string;
   deleted: boolean;
   limit: number;
   cursor?: { createdAt: string; id: string };
@@ -56,9 +55,6 @@ export async function listParticipants(options: {
   conditions.push(options.deleted ? isNotNull(participants.deletedAt) : isNull(participants.deletedAt));
   if (options.attendance === "present") conditions.push(isNotNull(participants.checkedInAt));
   if (options.attendance === "absent") conditions.push(isNull(participants.checkedInAt));
-  if (options.whatsapp === "not_opened") conditions.push(isNull(participants.whatsappOpenedAt));
-  if (options.whatsapp === "opened") conditions.push(and(isNotNull(participants.whatsappOpenedAt), isNull(participants.whatsappConfirmedAt))!);
-  if (options.whatsapp === "confirmed") conditions.push(isNotNull(participants.whatsappConfirmedAt));
   if (options.q) {
     const normalized = normalizeSearchText(options.q);
     const digits = options.q.replace(/\D/g, "");
@@ -89,8 +85,6 @@ export async function listParticipants(options: {
     participantType: participants.participantType,
     registrationChannel: participants.registrationChannel,
     checkedInAt: participants.checkedInAt,
-    whatsappOpenedAt: participants.whatsappOpenedAt,
-    whatsappConfirmedAt: participants.whatsappConfirmedAt,
     createdAt: participants.createdAt,
     deletedAt: participants.deletedAt,
   }).from(participants).where(and(...conditions)).orderBy(
@@ -230,51 +224,20 @@ export async function checkInParticipant(id: string, session: AuthSession) {
   });
 }
 
-export async function markWhatsAppOpened(id: string, session: AuthSession) {
+export async function cancelCheckInParticipant(id: string, session: AuthSession) {
   const event = await getActiveEvent();
   return db.transaction(async (tx) => {
-    const now = new Date();
-    const [updated] = await tx.update(participants).set({ whatsappOpenedAt: now, updatedAt: now }).where(and(
-      eq(participants.id, id), eq(participants.eventId, event.id), isNull(participants.deletedAt), isNull(participants.whatsappOpenedAt),
-    )).returning({ whatsappOpenedAt: participants.whatsappOpenedAt });
-    if (updated) {
-      await tx.insert(auditLogs).values({ eventId: event.id, participantId: id, actorRole: session.role, actorSessionId: session.sessionId, action: "WHATSAPP_OPENED", metadata: {} });
-      return { whatsappOpenedAt: updated.whatsappOpenedAt };
-    }
-    const [existing] = await tx.select({ whatsappOpenedAt: participants.whatsappOpenedAt }).from(participants).where(and(
-      eq(participants.id, id), eq(participants.eventId, event.id), isNull(participants.deletedAt),
-    )).limit(1);
-    if (!existing) throw new AppError("NOT_FOUND", 404, "Peserta tidak ditemukan atau sudah dihapus.");
-    return existing;
-  });
-}
-
-export async function markWhatsAppConfirmed(id: string, session: AuthSession) {
-  const event = await getActiveEvent();
-  return db.transaction(async (tx) => {
-    const now = new Date();
-    const [before] = await tx.select({ whatsappOpenedAt: participants.whatsappOpenedAt, whatsappConfirmedAt: participants.whatsappConfirmedAt }).from(participants).where(and(
-      eq(participants.id, id), eq(participants.eventId, event.id), isNull(participants.deletedAt),
-    )).for("update").limit(1);
-    if (!before) throw new AppError("NOT_FOUND", 404, "Peserta tidak ditemukan atau sudah dihapus.");
-    if (before.whatsappOpenedAt && before.whatsappConfirmedAt) return before;
-    const [updated] = await tx.update(participants).set({
-      whatsappOpenedAt: sql`coalesce(${participants.whatsappOpenedAt}, ${now})`,
-      whatsappConfirmedAt: sql`coalesce(${participants.whatsappConfirmedAt}, ${now})`,
-      updatedAt: now,
+    const [participant] = await tx.update(participants).set({
+      checkedInAt: null, checkedInBySessionId: null, updatedAt: new Date(),
     }).where(and(
-      eq(participants.id, id), eq(participants.eventId, event.id), isNull(participants.deletedAt),
-      or(isNull(participants.whatsappOpenedAt), isNull(participants.whatsappConfirmedAt)),
-    )).returning({ whatsappOpenedAt: participants.whatsappOpenedAt, whatsappConfirmedAt: participants.whatsappConfirmedAt });
-    if (updated) {
-      if (!before.whatsappOpenedAt) {
-        await tx.insert(auditLogs).values({ eventId: event.id, participantId: id, actorRole: session.role, actorSessionId: session.sessionId, action: "WHATSAPP_OPENED", metadata: { source: "confirmation" } });
-      }
-      if (!before.whatsappConfirmedAt) {
-        await tx.insert(auditLogs).values({ eventId: event.id, participantId: id, actorRole: session.role, actorSessionId: session.sessionId, action: "WHATSAPP_CONFIRMED", metadata: {} });
-      }
-      return updated;
-    }
-    throw new AppError("INTERNAL_ERROR", 500, "Status WhatsApp belum berhasil dicatat.");
+      eq(participants.id, id), eq(participants.eventId, event.id),
+      isNotNull(participants.checkedInAt), isNull(participants.deletedAt),
+    )).returning();
+    if (!participant) throw new AppError("NOT_CHECKED_IN", 409, "Peserta belum tercatat hadir atau tidak ditemukan. Muat ulang data.");
+    await tx.insert(auditLogs).values({
+      eventId: event.id, participantId: id, actorRole: session.role,
+      actorSessionId: session.sessionId, action: "PARTICIPANT_CHECK_IN_CANCELLED", metadata: {},
+    });
+    return { participant };
   });
 }

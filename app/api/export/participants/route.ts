@@ -21,7 +21,6 @@ export async function GET() {
       mupel: participants.mupel, participantType: participants.participantType,
       registrationChannel: participants.registrationChannel,
       createdAt: participants.createdAt, checkedInAt: participants.checkedInAt,
-      whatsappOpenedAt: participants.whatsappOpenedAt, whatsappConfirmedAt: participants.whatsappConfirmedAt,
     }).from(participants).where(and(eq(participants.eventId, event.id), isNull(participants.deletedAt)))
       .orderBy(asc(participants.sequenceNumber));
     const csv = buildParticipantsCsv(rows);

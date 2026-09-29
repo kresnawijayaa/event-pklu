@@ -63,3 +63,6 @@
 .success strong { display: block; font-size: 16px; }
 .success p { margin: 3px 0; font-size: 14px; }
 .success button { min-height: 44px; margin-top: 10px; padding: 0 13px; border: 1px solid var(--forest); border-radius: 7px; background: var(--forest); color: white; font-size: 14px; font-weight: 600; cursor: pointer; }
+.successActions { display: flex; flex-wrap: wrap; gap: 8px; }
+.result button.cancelCheckIn, .success button.cancelCheckIn { border-color: #a9b8ae; background: white; color: var(--forest-deep); }
+.result button.cancelCheckIn:hover:not(:disabled), .success button.cancelCheckIn:hover:not(:disabled) { background: var(--panel); }

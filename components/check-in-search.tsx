@@ -48,13 +48,27 @@ export default function CheckInSearch() {
     finally { setBusy(false); }
   }
 
+  async function cancelCheckIn(item: Participant) {
+    if (!window.confirm(`Batalkan check-in ${item.name}?`)) return;
+    setBusy(true); setMessage("");
+    try {
+      const response = await fetch(`/api/participants/${item.id}/check-in/cancel`, { method: "POST" });
+      const result = await response.json() as { ok: boolean; data?: { participant: Participant }; error?: { message?: string } };
+      if (!response.ok || !result.ok || !result.data) throw new Error(result.error?.message ?? "Check-in belum dapat dibatalkan.");
+      setItems((current) => current.map((person) => person.id === item.id ? { ...person, checkedInAt: null } : person));
+      setSuccess(null);
+      setMessage(`Check-in ${item.name} dibatalkan.`);
+    } catch (error) { setMessage(error instanceof Error ? error.message : "Koneksi bermasalah."); }
+    finally { setBusy(false); }
+  }
+
   return <section className={styles.section}>
     <form className={styles.search} onSubmit={search} role="search">
-      <label htmlFor="check-in-query">Kode PKLU, nama, atau nomor WhatsApp</label>
+      <label htmlFor="check-in-query">Nomor registrasi, nama, atau nomor WhatsApp</label>
       <div><span className={styles.searchField}><ScanLine aria-hidden="true" /><input ref={searchRef} id="check-in-query" value={query} onChange={(event) => setQuery(event.target.value)} required /></span><button type="submit" disabled={busy}>{busy ? "Mencari…" : "Cari peserta"}</button></div>
     </form>
     {message && <p className={styles.message} role="status">{message}</p>}
-    {success && <div className={styles.success} role="status"><strong>Kehadiran tercatat</strong><p>{success.name} · {success.registrationCode}</p><p>{success.checkedInAt && formatTime(success.checkedInAt)} WIB</p><button type="button" onClick={() => { setSuccess(null); setQuery(""); setItems([]); setSearched(false); searchRef.current?.focus(); }}>Cari peserta berikutnya</button></div>}
+    {success && <div className={styles.success} role="status"><strong>Kehadiran tercatat</strong><p>{success.name} · {success.registrationCode}</p><p>{success.checkedInAt && formatTime(success.checkedInAt)} WIB</p><div className={styles.successActions}><button type="button" onClick={() => { setSuccess(null); setQuery(""); setItems([]); setSearched(false); searchRef.current?.focus(); }}>Cari peserta berikutnya</button><button type="button" className={styles.cancelCheckIn} disabled={busy} onClick={() => cancelCheckIn(success)}>Batalkan check-in</button></div></div>}
     {searched && items.length > 0 && <div className={styles.results}>
       {items.map((item) => <article className={styles.result} key={item.id}>
         <div><span className={styles.code}>{item.registrationCode}</span><h2>{item.name}</h2><p>WhatsApp: {item.whatsappE164}</p>{item.church && <p>{item.church}</p>}
@@ -67,7 +81,9 @@ export default function CheckInSearch() {
           </div>
           {item.checkedInAt ? <p className={styles.timestamp}>Hadir · {formatTime(item.checkedInAt)} WIB</p> : <p className={styles.waiting}>Belum check-in</p>}
         </div>
-        <button type="button" onClick={() => checkIn(item.id)} disabled={busy || Boolean(item.checkedInAt)}>{item.checkedInAt ? "Sudah hadir" : "Catat hadir"}</button>
+        {item.checkedInAt
+          ? <button className={styles.cancelCheckIn} type="button" onClick={() => cancelCheckIn(item)} disabled={busy}>Batalkan check-in</button>
+          : <button type="button" onClick={() => checkIn(item.id)} disabled={busy}>Catat hadir</button>}
       </article>)}
     </div>}
   </section>;

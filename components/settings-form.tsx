@@ -13,6 +13,7 @@ const actionNames: Record<string, string> = {
   PARTICIPANT_DELETED: "Peserta dihapus",
   PARTICIPANT_RESTORED: "Peserta dipulihkan",
   PARTICIPANT_CHECKED_IN: "Check-in dicatat",
+  PARTICIPANT_CHECK_IN_CANCELLED: "Check-in dibatalkan",
   WHATSAPP_OPENED: "WhatsApp dibuka",
   WHATSAPP_CONFIRMED: "WhatsApp terkonfirmasi",
   SETTINGS_UPDATED: "Pengaturan diubah",

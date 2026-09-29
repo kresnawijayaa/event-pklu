@@ -38,12 +38,11 @@ export async function GET(request: Request) {
       }
     }
     const attendance = params.get("attendance") ?? "all";
-    const whatsapp = params.get("whatsapp") ?? "all";
-    if (!["all", "present", "absent"].includes(attendance) || !["all", "not_opened", "opened", "confirmed"].includes(whatsapp)) {
+    if (!["all", "present", "absent"].includes(attendance)) {
       throw new AppError("VALIDATION_ERROR", 400, "Filter daftar tidak valid.");
     }
     const result = await listParticipants({
-      q: params.get("q")?.slice(0, 120) ?? "", attendance, whatsapp,
+      q: params.get("q")?.slice(0, 120) ?? "", attendance,
       deleted, limit, cursor,
     });
     return success(result);

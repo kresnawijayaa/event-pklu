@@ -1,23 +1,5 @@
-﻿.actions { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
-.open, .confirm { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 0 12px; border: 1px solid var(--forest); border-radius: 6px; font-size: 15px; font-weight: 700; text-decoration: none; cursor: pointer; }
-.open { background: var(--forest); color: var(--paper-light); }
+.open { min-height: 40px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 0 11px; border: 1px solid var(--forest); border-radius: 7px; background: var(--forest); color: white; font-size: 13px; font-weight: 700; text-decoration: none; white-space: nowrap; }
 .open:hover { background: var(--forest-deep); }
-.open span { color: #e6c875; font-size: 16px; }
-.confirm { background: transparent; color: var(--forest); }
-.confirm:hover:not(:disabled) { background: var(--surface-muted); }
-.confirm:disabled { opacity: .6; cursor: wait; }
-.confirmed, .opened, .message { color: var(--ink-muted); font-size: 14px; line-height: 1.45; }
-.confirmed { padding: 6px 9px; border: 1px solid #a5b7a9; color: var(--forest); font-weight: 700; }
-.message { flex-basis: 100%; }
-.open, .confirm { min-height: 42px; border-radius: 7px; font-size: 13px; font-weight: 600; }
-.confirm { border-color: #cbd5e1; background: white; color: var(--ink); }
-.confirmed { border-color: #bbdfc8; border-radius: 5px; color: #177245; font-size: 12px; }
-.opened, .message { font-size: 12px; }
-.actions { column-gap: 0; row-gap: 8px; }
-.guide { flex-basis: 100%; margin: 0 0 3px; color: var(--ink-muted); font-size: 13px; line-height: 1.45; }
-.confirm, .confirmed { margin-left: 10px; }
-@media (max-width: 600px) {
-  .actions { width: 100%; align-items: center; row-gap: 10px; }
-  .open, .confirm { min-height: 44px; }
-  .opened, .message { flex: 0 0 100%; margin: 0; line-height: 1.45; }
-}
+.open:focus-visible { outline: 3px solid var(--turmeric); outline-offset: 2px; }
+.open svg { width: 15px; height: 15px; }
+@media (max-width: 600px) { .open { min-height: 44px; } }

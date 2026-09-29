@@ -17,16 +17,12 @@ export default async function DashboardPage() {
     { label: "Total peserta", value: summary.registered },
     { label: "Hadir", value: summary.checkedIn },
     { label: "Belum hadir", value: summary.notCheckedIn },
-    { label: "WhatsApp terkonfirmasi", value: summary.whatsappConfirmed },
   ];
-  const pendingWhatsApp = summary.registered - summary.whatsappConfirmed;
   const nextAction = summary.registered === 0
     ? { title: "Mulai dari data peserta", detail: "Tambahkan satu peserta atau impor file Excel yang sudah lengkap nomornya.", href: "/import", label: "Impor peserta" }
-    : pendingWhatsApp > 0
-      ? { title: `${pendingWhatsApp.toLocaleString("id-ID")} WhatsApp belum dikonfirmasi`, detail: "Gunakan filter WhatsApp di daftar peserta, kirim pesan, lalu tandai yang sudah terkirim.", href: "/participants", label: "Lihat peserta" }
-      : summary.notCheckedIn > 0
-        ? { title: "Data peserta siap untuk check-in", detail: "Saat peserta datang, cari nama atau nomor registrasi lalu catat kehadirannya.", href: "/check-in", label: "Buka check-in" }
-        : { title: "Semua peserta sudah tercatat hadir", detail: "Ringkasan di atas menunjukkan data terbaru yang tersimpan.", href: "/participants", label: "Lihat peserta" };
+    : summary.notCheckedIn > 0
+      ? { title: "Data peserta siap untuk check-in", detail: "Saat peserta datang, cari nama atau nomor registrasi lalu catat kehadirannya.", href: "/check-in", label: "Buka check-in" }
+      : { title: "Semua peserta sudah tercatat hadir", detail: "Ringkasan di atas menunjukkan data terbaru yang tersimpan.", href: "/participants", label: "Lihat peserta" };
 
   return (
     <div className={styles.page}>
@@ -52,7 +48,7 @@ export default async function DashboardPage() {
         <div className={styles.workflowHeading}><h2 id="workflow-title">Urutan kerja</h2><Link href="/panduan">Baca panduan</Link></div>
         <ol>
           <li><span className={styles.stepNumber}>1</span><div><strong>Masukkan data</strong><p>Impor file Excel atau tambahkan satu peserta.</p></div><div className={styles.stepLinks}><Link href="/import">Impor</Link><Link href="/register">Tambah peserta</Link></div></li>
-          <li><span className={styles.stepNumber}>2</span><div><strong>Kirim undangan</strong><p>Buka WhatsApp dari daftar peserta, kirim pesan, lalu konfirmasi.</p></div><div className={styles.stepLinks}><Link href="/participants">Lihat peserta</Link></div></li>
+          <li><span className={styles.stepNumber}>2</span><div><strong>Kirim undangan</strong><p>Buka WhatsApp dari daftar peserta. Pesan bisa dibuka lagi bila perlu.</p></div><div className={styles.stepLinks}><Link href="/participants">Lihat peserta</Link></div></li>
           <li><span className={styles.stepNumber}>3</span><div><strong>Catat kehadiran</strong><p>Cari peserta saat datang, lalu pilih Catat hadir.</p></div><div className={styles.stepLinks}><Link href="/check-in">Check-in</Link></div></li>
         </ol>
       </section>

@@ -16,7 +16,6 @@ export async function getDashboardSummary() {
     .select({
       registered: sql<number>`count(*)::int`,
       checkedIn: sql<number>`count(${participants.checkedInAt})::int`,
-      whatsappConfirmed: sql<number>`count(${participants.whatsappConfirmedAt})::int`,
     })
     .from(participants)
     .where(and(eq(participants.eventId, event.id), isNull(participants.deletedAt)));
@@ -29,6 +28,5 @@ export async function getDashboardSummary() {
     registered,
     checkedIn,
     notCheckedIn: registered - checkedIn,
-    whatsappConfirmed: totals?.whatsappConfirmed ?? 0,
   };
 }

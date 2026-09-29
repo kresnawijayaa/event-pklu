@@ -44,22 +44,22 @@ export default function GuidePage() {
       <section id="peserta" className={styles.section}>
         <div className={styles.sectionNumber}>03</div>
         <div><h2>Periksa peserta dan kirim pesan</h2>
-          <p>Di halaman <Link href="/participants">Peserta</Link>, cari nama, nomor registrasi, atau nomor WhatsApp. Buka baris peserta untuk melihat nomor dan data lain. Gunakan <strong>Edit data</strong> bila ada yang perlu diperbaiki.</p>
-          <p>Pilih <strong>Buka WhatsApp</strong>. Nomor tujuan dan pesan sudah disiapkan. Periksa lalu tekan Kirim di WhatsApp. Setelah terkirim, kembali ke web dan pilih <strong>Konfirmasi terkirim</strong>. Membuka WhatsApp saja belum berarti pesan sudah dikirim.</p>
+          <p>Di halaman <Link href="/participants">Peserta</Link>, cari nama, nomor registrasi, atau nomor WhatsApp. Nomor dan status hadir terlihat pada tiap baris. Pilih ikon pensil untuk mengubah data.</p>
+          <p>Pilih <strong>WhatsApp</strong> pada baris peserta. Nomor tujuan dan pesan sudah disiapkan. Periksa pesan lalu tekan Kirim di WhatsApp. Tautan bisa dibuka lagi kapan saja.</p>
         </div>
       </section>
 
       <section id="checkin" className={styles.section}>
         <div className={styles.sectionNumber}>04</div>
         <div><h2>Catat kehadiran saat peserta datang</h2>
-          <p>Buka <Link href="/check-in">Check-in</Link>. Cari nomor registrasi, nama, atau nomor WhatsApp. Cocokkan data pada hasil pencarian, lalu pilih <strong>Catat hadir</strong>. Setelah berhasil, pilih <strong>Cari peserta berikutnya</strong>. Jika peserta sudah tercatat hadir, waktunya tetap memakai check-in pertama.</p>
+          <p>Buka <Link href="/check-in">Check-in</Link>. Cari nomor registrasi, nama, atau nomor WhatsApp. Cocokkan data pada hasil pencarian, lalu pilih <strong>Catat hadir</strong>. Setelah berhasil, pilih <strong>Cari peserta berikutnya</strong>. Jika salah mencatat, pilih <strong>Batalkan check-in</strong> pada hasil pencarian atau ikon pembatalan di daftar Peserta.</p>
         </div>
       </section>
 
       <section id="ringkasan" className={styles.section}>
         <div className={styles.sectionNumber}>05</div>
         <div><h2>Lihat ringkasan</h2>
-          <p><Link href="/">Beranda</Link> menampilkan total peserta, yang sudah hadir, yang belum hadir, dan WhatsApp yang sudah dikonfirmasi. Bagian Langkah berikutnya menunjukkan tugas yang masih perlu ditangani. Admin juga bisa mengunduh CSV dari halaman Peserta.</p>
+          <p><Link href="/">Beranda</Link> menampilkan total peserta, yang sudah hadir, dan yang belum hadir. Bagian Langkah berikutnya menunjukkan tugas yang masih perlu ditangani. Admin juga bisa mengunduh CSV dari halaman Peserta.</p>
         </div>
       </section>
 

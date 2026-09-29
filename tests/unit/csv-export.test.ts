@@ -15,7 +15,7 @@ describe("participant CSV export", () => {
       registrationCode: "PKLU-001", name: "=Ruth", whatsappE164: "6281234567890", church: null,
       registrationMode: "Rombongan", category: "Umum", mupel: "Jakarta",
       participantType: "Peserta", registrationChannel: "Manual",
-      createdAt, checkedInAt: null, whatsappOpenedAt: null, whatsappConfirmedAt: null,
+      createdAt, checkedInAt: null,
     }]);
     expect(csv.startsWith("\uFEFF")).toBe(true);
     expect(csv).toContain("Terdaftar (WIB)");

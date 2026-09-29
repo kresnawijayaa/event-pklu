@@ -3,7 +3,7 @@ import { requireSession } from "@/lib/auth/session";
 import { hasSameOrigin } from "@/lib/auth/origin";
 import { AppError } from "@/lib/errors";
 import { failure, success } from "@/lib/response";
-import { markWhatsAppOpened } from "@/lib/participants/service";
+import { cancelCheckInParticipant } from "@/lib/participants/service";
 
 export const runtime = "nodejs";
 
@@ -13,6 +13,6 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
     const session = await requireSession();
     const { id } = await context.params;
     z.string().uuid().parse(id);
-    return success(await markWhatsAppOpened(id, session));
+    return success(await cancelCheckInParticipant(id, session));
   } catch (error) { return failure(error); }
 }

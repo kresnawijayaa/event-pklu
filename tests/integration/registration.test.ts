@@ -3,7 +3,7 @@ import { eq, inArray } from "drizzle-orm";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { db, pool } from "@/db";
 import { auditLogs, events, participants, sessions } from "@/db/schema";
-import { checkInParticipant, createParticipant, markWhatsAppConfirmed, markWhatsAppOpened, restoreParticipant, softDeleteParticipant } from "@/lib/participants/service";
+import { checkInParticipant, createParticipant, restoreParticipant, softDeleteParticipant } from "@/lib/participants/service";
 import { getEventSettings, updateEventSettings } from "@/lib/settings";
 
 const sessionId = randomUUID();
@@ -101,32 +101,6 @@ describe("participant registration transaction", () => {
     }, { sessionId, role: "STAFF", expiresAt: new Date(Date.now() + 60_000) });
     createdIds.push(confirmed.participant!.id);
     expect(confirmed.participant?.name).toBe(`Different Participant ${suffix}`);
-  });
-
-  it("keeps first WhatsApp timestamps and fills opened when confirming directly", async () => {
-    const suffix = randomUUID().replace(/\D/g, "").slice(0, 8).padEnd(8, "7");
-    const created = await createParticipant({
-      requestId: randomUUID(), name: `WhatsApp Participant ${suffix}`,
-      whatsapp: `62817${suffix}9`, confirmDuplicate: false,
-    }, { sessionId, role: "STAFF", expiresAt: new Date(Date.now() + 60_000) });
-    const participantId = created.participant!.id;
-    createdIds.push(participantId);
-    const firstOpen = await markWhatsAppOpened(participantId, { sessionId, role: "STAFF", expiresAt: new Date(Date.now() + 60_000) });
-    const repeatedOpen = await markWhatsAppOpened(participantId, { sessionId, role: "STAFF", expiresAt: new Date(Date.now() + 60_000) });
-    expect(repeatedOpen.whatsappOpenedAt?.toISOString()).toBe(firstOpen.whatsappOpenedAt?.toISOString());
-    const firstConfirm = await markWhatsAppConfirmed(participantId, { sessionId, role: "STAFF", expiresAt: new Date(Date.now() + 60_000) });
-    const repeatedConfirm = await markWhatsAppConfirmed(participantId, { sessionId, role: "STAFF", expiresAt: new Date(Date.now() + 60_000) });
-    expect(repeatedConfirm.whatsappConfirmedAt?.toISOString()).toBe(firstConfirm.whatsappConfirmedAt?.toISOString());
-    expect(repeatedConfirm.whatsappOpenedAt?.toISOString()).toBe(firstOpen.whatsappOpenedAt?.toISOString());
-
-    const direct = await createParticipant({
-      requestId: randomUUID(), name: `Direct Confirmation ${suffix}`,
-      whatsapp: `62818${suffix}9`, confirmDuplicate: false,
-    }, { sessionId, role: "STAFF", expiresAt: new Date(Date.now() + 60_000) });
-    createdIds.push(direct.participant!.id);
-    const directConfirm = await markWhatsAppConfirmed(direct.participant!.id, { sessionId, role: "STAFF", expiresAt: new Date(Date.now() + 60_000) });
-    expect(directConfirm.whatsappOpenedAt).toBeInstanceOf(Date);
-    expect(directConfirm.whatsappConfirmedAt).toBeInstanceOf(Date);
   });
 
   it("uses a changed registration prefix for new participants", async () => {
